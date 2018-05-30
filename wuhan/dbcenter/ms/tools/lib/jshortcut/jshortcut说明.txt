@@ -1,0 +1,93 @@
+jshortcut用于创建桌面快捷方式及相关内容，使用此jar包时，需要导入jshortcut.dll文件，不然会出现exception。具体导入dll文件详见百度经验：http://jingyan.baidu.com/article/2f9b480d96ce8741ca6cc249.html
+需要注意jshortcut.dll分x86/x64，不要放错了（话说，x64的dll我找了好久才找到）
+
+使用方法如下：
+
+private void createShortcut() {
+        // 获取系统桌面路径
+        String desktop = FileSystemView.getFileSystemView().getHomeDirectory()
+                .getAbsolutePath();
+        // 程序执行文件路径
+        String path = System.getProperty("user.dir") + "\\appName.exe";
+ 
+ 
+        JShellLink link = new JShellLink();
+        link.setFolder(desktop); // 快捷方式存放地址
+        link.setName("appName"); // 快捷方式名称
+        link.setPath(path); // 快捷方式指向地址
+        link.save();
+         
+    }
+
+-----------------------------------------------------------------------------------
+带参数
+public static void createShortCut(String fileorFolderPath, String writeShortCutPath, String arguments){
+		JShellLink link=new JShellLink();
+		writeShortCutPath=writeShortCutPath.replaceAll("/", "\\");
+		String folder=writeShortCutPath.substring(0, writeShortCutPath.lastIndexOf("\\")+1);
+		String name=writeShortCutPath.substring(writeShortCutPath.lastIndexOf("\\")+1, 
+				writeShortCutPath.length());
+		link.setName(name);//目标快捷方式文件夹名称
+		link.setFolder(folder);//目的快捷方式文件路径片段
+		link.setPath(fileorFolderPath);
+		if(arguments != null && !"".equals(arguments.trim())){
+			link.setArguments(arguments);			
+		}
+		link.save();
+	}
+
+---------------------------------------------------------------------------------
+import net.jimmc.jshortcut.JShellLink;  
+  
+/** 
+ * 快捷方式工具类 
+ *  
+ * @author ice(古雨QQ:494174519,13728989948(你的代码改进,是对我们共同的鼓励)) 
+ *  
+ */  
+public class ShortCut {  
+  
+    // 需要先下载jshortcut.jar直接在百度搜一下  
+    public static void main(String args[]) {  
+        String fileFolderPath = "D:\\test\\jshortcut-0_4.jar";  
+        String writeFolderPath = "D:\\new";  
+        createShortCut(fileFolderPath, writeFolderPath);  
+        String path=getShortCutRealPath(writeFolderPath);  
+        System.out.println(path);  
+    }  
+  
+    /** 
+     * 创建一个快捷方式 
+     *  
+     * @param fileOrFolderPath 
+     *            源文件夹路径 
+     * @param writeShortCutPath 
+     *            目标文件路径(快捷方式型) 
+     */  
+    public static void createShortCut(String fileOrFolderPath,String writeShortCutPath) {  
+        JShellLink link = new JShellLink();  
+        writeShortCutPath.replaceAll("/", "\\");  
+        String folder = writeShortCutPath.substring(0, writeShortCutPath.lastIndexOf("\\"));  
+        String name = writeShortCutPath.substring(writeShortCutPath.lastIndexOf("\\") + 1, writeShortCutPath.length());  
+        link.setName(name);// 目的快捷方式文件夹名称  
+        link.setFolder(folder);// 目的快捷方式文件路径片段  
+        link.setPath(fileOrFolderPath);  
+        link.save();  
+    }  
+  
+    /** 
+     * 获取一个快捷方式真实地址 
+     *  
+     * @param fileFolderPath 
+     *            源文件夹路径 
+     */  
+    public static String getShortCutRealPath(String fileFolderPath) {  
+        // 根据快捷方式的路径和文件夹名,获取源文件夹地址  
+        fileFolderPath.replaceAll("/", "\\");  
+        String folder = fileFolderPath.substring(0, fileFolderPath.lastIndexOf("\\"));  
+        String name = fileFolderPath.substring(fileFolderPath.lastIndexOf("\\") + 1, fileFolderPath.length());  
+        JShellLink link = new JShellLink(folder, name);  
+        link.load();  
+        return link.getPath();  
+    }  
+}  
