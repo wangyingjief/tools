@@ -1,0 +1,7 @@
+<dependencies>
+	<dependency>
+		<groupId>net.jimmc.jshortcut</groupId>
+		<artifactId>jshortcut</artifactId>
+		<version>0.4</version>
+	</dependency>
+</dependencies>
