@@ -66,8 +66,8 @@ public class EmailClient {
 	}
 
 	/**
-	 * 发送简单邮件(同步)
-	 * 
+	 * <b>发送简单邮件(同步)</b>
+	 * <br><font color="red">不推荐使用</font>
 	 * @param toEmail
 	 *            发送给谁
 	 * @param subject
@@ -91,7 +91,8 @@ public class EmailClient {
 	}
 
 	/**
-	 * 发送简单邮件(异步)
+	 * <b>发送简单邮件(异步)</b> <br>
+	 * <font color="green">推荐使用</font>
 	 * 
 	 * @param toEmail
 	 *            发送给谁
@@ -100,7 +101,12 @@ public class EmailClient {
 	 * @param msg
 	 *            内容
 	 * @param callback
-	 *            返回发送结果
+	 *            发送结果<br>
+	 *            <b>使用方式:</b> <br>
+	 *            email.asynSendSimpleEmail("xx@qq.com", "test", "这是1封测试邮件！",(Result r) -> { <br>
+	 *            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("返回发送状态：" + r.getType());<br>
+	 *            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println("返回发送消息：" + r.getMsg()); <br>
+	 *            });
 	 */
 	public void asynSendSimpleEmail(String toEmail, String subject, String msg, EmailCallback callback) {
 		if (pool == null) {
