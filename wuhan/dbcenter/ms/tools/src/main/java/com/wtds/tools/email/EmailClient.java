@@ -11,6 +11,13 @@ import org.apache.commons.mail.SimpleEmail;
 
 import com.wtds.tools.ThreadPoolUtil;
 
+/**
+ * <b>发送邮件客户端</b><br>
+ * 使用阿里云邮箱配置初始化客户端:<br>
+ * EmailClient email = new EmailClient(EmailClient.aliyunEmailConfig("登陆名", "密码"));
+ * @author wyj
+ *
+ */
 public class EmailClient {
 
 	private String smtp = "";
@@ -26,6 +33,12 @@ public class EmailClient {
 	// 实例一个线程池，用于处理日志
 	private ThreadPoolExecutor pool;
 
+	/**
+	 * 阿里云邮发件配置
+	 * @param userName
+	 * @param password
+	 * @return
+	 */
 	public static Map<String, String> aliyunEmailConfig(String userName, String password) {
 		Map<String, String> conf = new HashMap<String, String>();
 		conf.put("smtp", "smtp.mxhichina.com");
@@ -36,8 +49,7 @@ public class EmailClient {
 	}
 
 	/**
-	 * 初始化阿里云邮件客户端配置信息
-	 * 
+	 * 使用阿里云邮发件配置信息初始化客户端
 	 * @param aliyunEmailConfig
 	 */
 	public EmailClient(Map<String, String> aliyunEmailConfig) {
@@ -51,11 +63,10 @@ public class EmailClient {
 	/**
 	 * 初始化邮件客户端
 	 * 
-	 * @param host
-	 * @param port
-	 * @param myEmail
-	 * @param userName
-	 * @param password
+	 * @param smtp 发件服务器
+	 * @param port 端口
+	 * @param userName 登陆名
+	 * @param password 密码
 	 */
 	public EmailClient(String smtp, int port, String userName, String password) {
 		this.smtp = smtp;
