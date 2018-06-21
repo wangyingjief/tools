@@ -1,6 +1,9 @@
 package com.wtds.tools;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -562,8 +565,53 @@ public class ByteUtil {
 		return result;
 	}
 
+	/**
+	 * 分割byte[](与joinByte组合使用)
+	 * @param data 需要被分割的data
+	 * @param splitSize 分割为多大一个
+	 * @return
+	 */
+	public static List<byte[]> splitByte(byte[] data, int splitSize) {
+		List<byte[]> list = new ArrayList<byte[]>();
+		int splitCount = data.length / splitSize + 1;
+		ByteBuffer bb = ByteBuffer.wrap(data);
+		for (int i = 0; i < splitCount; i++) {
+			int len = splitSize;
+			byte[] rb = new byte[len];
+			if ((bb.limit() - bb.position()) < splitSize) {
+				len = bb.limit() - bb.position();
+			}
+			bb.get(rb, 0, len);
+			list.add(rb);
+		}
+		return list;
+	}
+	
+	/**
+	 * 组合byte[](与splitByte组合使用)
+	 * @param list
+	 * @return
+	 */
+	public static byte[] joinByte(List<byte[]> list) {
+		int len = list.size() > 1 
+				? (list.get(0).length * list.size() - 1) + (list.get(list.size() - 1).length)
+				: list.get(0).length;
+		byte[] b = new byte[len];
+		ByteBuffer bb = ByteBuffer.wrap(b);
+		for(byte [] sub : list) {
+			bb.put(sub);
+		}
+		return b;
+	}
 	
 	public static void main(String[] args) throws Exception {
+//		String s = "";
+//		byte[] t = s.getBytes();
+//		List<byte[]> list = splitByte(t, 986);
+//		byte [] g = joinByte(list);
+//		System.out.println(new String(g));
+		
+		
 		String binary = "110011";
 		System.out.println(ByteUtil.binaryToDecimalism(binary));
 		System.out.println(ByteUtil.binaryToOctal(binary));
