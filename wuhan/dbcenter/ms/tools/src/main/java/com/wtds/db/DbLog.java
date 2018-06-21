@@ -10,16 +10,19 @@ import java.util.concurrent.Executors;
 
 /**
  * 数据库日志打印类
+ * 
  * @author wangyingjie
  */
 public class DbLog {
-	
-	private static String logFilePath = System.getProperty("user.dir");
 
 	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
 
 	FileWriter fw = null;
+
+	String consoleLogPath = System.getProperty("user.dir") + "/log";
+
+	String logName = "db_logger";
 
 	/**
 	 * 打印日志
@@ -28,10 +31,11 @@ public class DbLog {
 	 * @param add
 	 */
 	private void sendLogger(String info, boolean addflag) {
-		String filePath = logFilePath + "/log";
+		String filePath = consoleLogPath;
 		Date currentTime = new Date();
+		String dayStr = formatter2.format(currentTime);
 		String dateString = formatter.format(currentTime);
-		String fileName = filePath + "/db_logger_" + formatter2.format(currentTime) + ".log";
+		String fileName = filePath + "/" + logName + ".log";
 
 		try {
 			File path = new File(filePath);
@@ -41,6 +45,13 @@ public class DbLog {
 			}
 
 			File f = new File(fileName);
+			String lts = formatter2.format(f.lastModified());
+			if (!dayStr.equals(lts)) {
+				String rfileName = filePath + "/" + logName + "_" + lts + ".log";
+				f.renameTo(new File(rfileName));
+				f = new File(fileName);
+			}
+
 			fw = new FileWriter(f, true);
 
 		} catch (Exception e) {
@@ -49,9 +60,7 @@ public class DbLog {
 
 		synchronized (fw) {
 			try {
-
 				PrintWriter pw = new PrintWriter(fw);
-
 				if (addflag) {
 					pw.print(info);
 				} else {
@@ -76,7 +85,8 @@ public class DbLog {
 	 * 打印日志
 	 * 
 	 * @param info
-	 * @param addflag true:追加打印
+	 * @param addflag
+	 *            true:追加打印
 	 */
 	public static void logger(String info, boolean addflag) {
 		final String msg = info;
@@ -101,5 +111,5 @@ public class DbLog {
 		System.out.println(info);
 		logger(info, false);
 	}
-	
+
 }
