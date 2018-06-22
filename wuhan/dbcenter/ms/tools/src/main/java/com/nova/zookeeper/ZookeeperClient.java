@@ -6,6 +6,10 @@ import java.util.List;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.cache.ChildData;
+import org.apache.curator.framework.recipes.cache.TreeCache;
+import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
+import org.apache.curator.framework.recipes.cache.TreeCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 
 import com.alibaba.fastjson.JSON;
@@ -118,15 +122,20 @@ public class ZookeeperClient {
 			}
 		}
 	}
-	
+
 	/**
 	 * 获取数据
+	 * 
 	 * @param path
 	 * @return
 	 * @throws Exception
 	 */
 	public String getData(String path) throws Exception {
 		String data = null;
+		if (curatorFramework.checkExists().forPath(path) == null) {
+			return data;
+		}
+
 		byte[] mData = curatorFramework.getData().forPath(path);
 		if (mData != null) {
 			String jsonStr = new String(mData, ZookeeperConfig.charset);
@@ -140,7 +149,7 @@ public class ZookeeperClient {
 				} else {
 					byteData = m.getData();
 				}
-				System.out.println("2-"+byteData.length);
+				System.out.println("2-" + byteData.length);
 				data = new String(byteData, ZookeeperConfig.charset);
 			} else if (m.getIsb() == 1) {
 				List<ZkNodeDataModel> submList = new ArrayList<ZkNodeDataModel>();
@@ -156,6 +165,43 @@ public class ZookeeperClient {
 			}
 		}
 		return data;
+	}
+
+	/**
+	 * 删除节点,包含节点下所有数据
+	 * 
+	 * @param path
+	 * @throws Exception
+	 */
+	public void delete(String path) throws Exception {
+		if (curatorFramework.checkExists().forPath(path) == null) {
+			return;
+		}
+		curatorFramework.delete().deletingChildrenIfNeeded().forPath(path);
+	}
+
+	/**
+	 * 监听
+	 * @param path 路径
+	 * @param listen 监听类
+	 */
+	public void listen(String path, ZookeeperListen listen) {
+		// 设置节点的cache
+		@SuppressWarnings("resource")
+		TreeCache treeCache = new TreeCache(curatorFramework, path);
+		// 设置监听器和处理过程
+		treeCache.getListenable().addListener(new TreeCacheListener() {
+			@Override
+			public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception {
+				listen.event(event);
+			}
+		});
+		// 开始监听
+		try {
+			treeCache.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public CuratorFramework getCuratorFramework() {
