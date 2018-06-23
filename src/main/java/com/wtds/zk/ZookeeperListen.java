@@ -1,4 +1,4 @@
-package com.nova.zookeeper;
+package com.wtds.zk;
 
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
 

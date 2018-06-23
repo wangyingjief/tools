@@ -1,4 +1,4 @@
-package com.nova.zookeeper;
+package com.wtds.zk;
 
 import java.util.ArrayList;
 import java.util.List;

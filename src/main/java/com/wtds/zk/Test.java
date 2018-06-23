@@ -1,4 +1,4 @@
-package com.nova.zookeeper;
+package com.wtds.zk;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -18,12 +18,12 @@ public class Test {
 	}
 
 	public static void t3() throws Exception {
-		ZookeeperClient client = new ZookeeperClient("172.16.4.103:2181,172.16.4.104:2181,172.16.4.105:2181");
+		ZookeeperClient client = new ZookeeperClient("114.55.136.158:2181,114.55.136.158:2182,114.55.136.158:2183");
 		List<String> nodes0 = client.getCuratorFramework().getChildren().forPath("/");
 		System.out.println("-->");
 		System.out.println(JSON.toJSONString(nodes0));
-
-		client.listen("/txt2", (TreeCacheEvent event) -> {
+		
+		client.listen("/txt2/a/c/d", (TreeCacheEvent event) -> {
 			ChildData data = event.getData();
 			if (data != null) {
 				switch (event.getType()) {
@@ -44,9 +44,10 @@ public class Test {
 			}
 		});
 		
-		client.delete("/txt2");
-		client.create("/txt2", "测试");
-		System.out.println("-->" + client.getData("/txt2"));
+		client.delete("/txt2/a/c/d");
+		client.create("/txt2/a/c/d", "测试");
+		client.create("/txt2/a/c/d", "测试2");
+		System.out.println("-->" + client.getData("/txt2/a/c/d"));
 
 	}
 

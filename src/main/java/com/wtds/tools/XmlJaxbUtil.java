@@ -52,4 +52,11 @@ public class XmlJaxbUtil {
 		Object object = unmarshaller.unmarshal(new File(xmlPath));
 		return object;
 	}
+	public static <T> T xmlToBean2(String xmlPath, Class<T> load) throws JAXBException, IOException {
+		JAXBContext context = JAXBContext.newInstance(load);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		Object object = unmarshaller.unmarshal(new File(xmlPath));
+		return (T)object;
+	}
+	
 }
