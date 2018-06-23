@@ -1,19 +1,21 @@
-package com.nova.zookeeper;
+package com.wtds.zk;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.TreeCache;
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
 import org.apache.curator.framework.recipes.cache.TreeCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.data.Stat;
 
 import com.alibaba.fastjson.JSON;
 import com.wtds.tools.Lz4Util;
+import com.wtds.tools.ReflectUtil;
 import com.wtds.tools.StringUtil;
 
 /**
@@ -24,6 +26,8 @@ import com.wtds.tools.StringUtil;
  */
 public class ZookeeperClient {
 
+	private static final String ZKCONFIG_HOME_PATH = "/nova/data/clean/config";
+	
 	@SuppressWarnings("unused")
 	private ZookeeperClient() {
 	}
@@ -96,31 +100,35 @@ public class ZookeeperClient {
 	 */
 	public void create(String path, String data) throws Exception {
 		if (!StringUtil.isEmpty(path)) {
+			Stat stat = curatorFramework.checkExists().forPath(path);
 			if (StringUtil.isEmpty(data)) {
-				curatorFramework.create().forPath(path);
+				if (stat == null) {
+					curatorFramework.create().creatingParentsIfNeeded().forPath(path);
+				}
 			} else {
 				List<ZkNodeDataModel> list = ZkNodeDataModel.enDataModel(path, data);
 				if (list != null && list.size() > 0) {
 					if (list.size() == 1) {
 						ZkNodeDataModel m = list.get(0);
-						curatorFramework.create().forPath(path, m.toBytes());
+						curatorFramework.create().creatingParentsIfNeeded().forPath(path, m.toBytes());
 					} else {
 						String uuid = "";
 						for (int i = 0; i < list.size(); i++) {
 							ZkNodeDataModel m = list.get(i);
 							if (m.getIsb() == 1) {
 								uuid = m.getUuid();
-								curatorFramework.create().forPath(path, m.toBytes());
+								curatorFramework.create().creatingParentsIfNeeded().forPath(path, m.toBytes());
 							} else {
 								String subPath = path + "/sd-" + uuid + "-" + i;
 								System.out.println(m.toBytes().length);
-								curatorFramework.create().forPath(subPath, m.toBytes());
+								curatorFramework.create().creatingParentsIfNeeded().forPath(subPath, m.toBytes());
 							}
 						}
 					}
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -181,9 +189,32 @@ public class ZookeeperClient {
 	}
 
 	/**
+	 * 判断节点是否存在<br>
+	 * 存在[true] 不存在[false]
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public boolean check(String path) {
+		Stat stat = null;
+		try {
+			stat = curatorFramework.checkExists().forPath(path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (stat == null)
+			return false;
+		else
+			return true;
+	}
+
+	/**
 	 * 监听
-	 * @param path 路径
-	 * @param listen 监听类
+	 * 
+	 * @param path
+	 *            路径
+	 * @param listen
+	 *            监听类
 	 */
 	public void listen(String path, ZookeeperListen listen) {
 		// 设置节点的cache
@@ -201,6 +232,122 @@ public class ZookeeperClient {
 			treeCache.start();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 获取配置
+	 * 
+	 * @param group
+	 *            组名(类名)
+	 * @param key
+	 *            主键(字段名)
+	 * @return
+	 */
+	public String getConfig(String group, String key) {
+		String result = null;
+		String path = ZKCONFIG_HOME_PATH + "/" + group + "/" + key;
+		try {
+			result = this.getData(path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/**
+	 * 添加Class中所有的属性到zookeeper中
+	 * 
+	 * @param clazz
+	 * @throws Exception 
+	 */
+	public void addClassConfig(Class<?> clazz) throws ZookeeperConfigException {
+		String gPath = ZKCONFIG_HOME_PATH + "/" + clazz.getSimpleName();
+		if (this.check(gPath)) {
+			throw new ZookeeperConfigException("配置" + gPath + "已经存在");
+		} else {
+			Field[] fields = clazz.getFields();
+			for (Field f : fields) {
+				Object object = ReflectUtil.getFieldValue(f.getName(), clazz);
+				if (object != null) {
+					String path = ZKCONFIG_HOME_PATH + "/" + clazz.getSimpleName() + "/" + f.getName();
+					try {
+						if (this.check(path)) {
+							this.delete(path);
+						}
+						this.create(path, object.toString());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * 写入配置信息
+	 * 
+	 * @param group
+	 * @param key
+	 * @param config
+	 * @throws Exception
+	 */
+	public void addConfig(String group, String key, String config) throws Exception {
+		String path = ZKCONFIG_HOME_PATH + "/" + group + "/" + key;
+		String configData = this.getData(path);
+		if (!StringUtil.isEmpty(configData)) {
+			throw new Exception("group:" + group + " key:" + key + "已经存在配置,不能覆盖");
+		} else {
+			this.create(path, config);
+		}
+	}
+
+	/**
+	 * 修改配置信息
+	 * 
+	 * @param group
+	 * @param key
+	 * @param config
+	 * @throws Exception
+	 */
+	public void updateConfig(String group, String key, String config) throws Exception {
+		String path = ZKCONFIG_HOME_PATH + "/" + group + "/" + key;
+		if (this.check(path)) {
+			this.delete(path);
+		}
+		this.create(path, config);
+	}
+	
+	/**
+	 * 根据group清除配置
+	 * @param group
+	 * @param key
+	 */
+	public void clearConfigByGroup(String group) {
+		String path = ZKCONFIG_HOME_PATH + "/" + group;
+		if (this.check(path)) {
+			try {
+				this.delete(path);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 清除配置
+	 * 
+	 * @param group
+	 * @param key
+	 */
+	public void clearConfig(String group, String key) {
+		String path = ZKCONFIG_HOME_PATH + "/" + group + "/" + key;
+		if (this.check(path)) {
+			try {
+				this.delete(path);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
