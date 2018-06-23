@@ -2,6 +2,8 @@ package com.wtds.zk;
 
 import java.nio.charset.Charset;
 
+import net.sf.ehcache.config.ConfigError;
+
 public class ZookeeperConfig {
 	
 	/**
@@ -30,6 +32,17 @@ public class ZookeeperConfig {
 	private int maxRetries;
 	
 	/**
+	 * 最大重试时间
+	 */
+	private int maxElapsedTimeMs;
+	
+	/**
+	 * 每次重试间隔时间
+
+	 */
+	private int sleepMsBetweenRetries;
+	
+	/**
 	 * 字符集
 	 */
 	public static Charset charset = Charset.forName("UTF-8");
@@ -50,7 +63,25 @@ public class ZookeeperConfig {
 		config.setConnectionTimeoutMs(5000);
 		config.setBaseSleepTimeMs(1000);
 		config.setMaxRetries(3);
+		config.setMaxElapsedTimeMs(5000);
+		config.setSleepMsBetweenRetries(1000);
 		return config;
+	}
+
+	public int getMaxElapsedTimeMs() {
+		return maxElapsedTimeMs;
+	}
+
+	public void setMaxElapsedTimeMs(int maxElapsedTimeMs) {
+		this.maxElapsedTimeMs = maxElapsedTimeMs;
+	}
+
+	public int getSleepMsBetweenRetries() {
+		return sleepMsBetweenRetries;
+	}
+
+	public void setSleepMsBetweenRetries(int sleepMsBetweenRetries) {
+		this.sleepMsBetweenRetries = sleepMsBetweenRetries;
 	}
 
 	public String getConnectString() {

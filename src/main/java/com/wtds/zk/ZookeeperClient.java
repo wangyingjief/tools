@@ -7,10 +7,12 @@ import java.util.List;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.TreeCache;
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
 import org.apache.curator.framework.recipes.cache.TreeCacheListener;
-import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.curator.retry.RetryUntilElapsed;
+import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
 import com.alibaba.fastjson.JSON;
@@ -27,7 +29,7 @@ import com.wtds.tools.StringUtil;
 public class ZookeeperClient {
 
 	private static final String ZKCONFIG_HOME_PATH = "/nova/data/clean/config";
-	
+
 	@SuppressWarnings("unused")
 	private ZookeeperClient() {
 	}
@@ -62,7 +64,9 @@ public class ZookeeperClient {
 	 * 初始化zookeeper client
 	 */
 	private void instantiation() {
-		retryPolicy = new ExponentialBackoffRetry(config.getBaseSleepTimeMs(), config.getMaxRetries());
+		retryPolicy = new RetryUntilElapsed(config.getMaxElapsedTimeMs(), config.getSleepMsBetweenRetries());
+		// retryPolicy = new ExponentialBackoffRetry(config.getBaseSleepTimeMs(),
+		// config.getMaxRetries());
 		curatorFramework = CuratorFrameworkFactory.builder().connectString(config.getConnectString())
 				.sessionTimeoutMs(config.getSessionTimeoutMs()).connectionTimeoutMs(config.getConnectionTimeoutMs())
 				.retryPolicy(retryPolicy).build();
@@ -95,40 +99,115 @@ public class ZookeeperClient {
 	 * 创建节点
 	 * 
 	 * @param path
+	 * @throws Exception
+	 */
+	public void create(String path) throws Exception {
+		create(path, null, CreateMode.PERSISTENT);
+	}
+
+	/**
+	 * 创建节点
+	 * 
+	 * @param path
+	 * @param createMode
+	 * @throws Exception
+	 */
+	public void create(String path, CreateMode createMode) throws Exception {
+		create(path, null, createMode);
+	}
+	
+	/**
+	 * 创建节点
+	 * @param path
+	 * @param obj
+	 * @throws Exception
+	 */
+	public void create(String path,Object obj) throws Exception{
+		create(path, JSON.toJSONString(obj), CreateMode.PERSISTENT);
+	}
+
+	/**
+	 * 创建节点
+	 * 
+	 * @param path
 	 * @param data
 	 * @throws Exception
 	 */
 	public void create(String path, String data) throws Exception {
+		create(path, data, CreateMode.PERSISTENT);
+	}
+	
+	/**
+	 * 创建节点
+	 * @param path
+	 * @param obj
+	 * @param createMode
+	 * @throws Exception
+	 */
+	public void create(String path, Object obj, CreateMode createMode) throws Exception {
+		create(path, JSON.toJSONString(obj), createMode);
+	}
+	
+	/**
+	 * 创建节点
+	 * 
+	 * @param path
+	 * @param data
+	 * @param createMode
+	 * @throws Exception
+	 */
+	public void create(String path, String data, CreateMode createMode) throws Exception {
 		if (!StringUtil.isEmpty(path)) {
 			Stat stat = curatorFramework.checkExists().forPath(path);
-			if (StringUtil.isEmpty(data)) {
-				if (stat == null) {
-					curatorFramework.create().creatingParentsIfNeeded().forPath(path);
+			if (stat == null) {
+				curatorFramework.create().creatingParentsIfNeeded().withMode(createMode).forPath(path);
+				if (!StringUtil.isEmpty(data)) {
+					setData(path, data);
 				}
 			} else {
-				List<ZkNodeDataModel> list = ZkNodeDataModel.enDataModel(path, data);
-				if (list != null && list.size() > 0) {
-					if (list.size() == 1) {
-						ZkNodeDataModel m = list.get(0);
-						curatorFramework.create().creatingParentsIfNeeded().forPath(path, m.toBytes());
+				throw new Exception("节点:" + path + "已经存在");
+			}
+		}
+	}
+	
+	/**
+	 * 写入数据
+	 * @param path
+	 * @param obj
+	 * @throws Exception
+	 */
+	public void setData(String path, Object obj) throws Exception {
+		setData(path, JSON.toJSONString(obj));
+	}
+
+	/**
+	 * 写入数据
+	 * 
+	 * @param path
+	 * @param data
+	 * @throws Exception
+	 */
+	public void setData(String path, String data) throws Exception {
+		List<ZkNodeDataModel> list = ZkNodeDataModel.enDataModel(path, data);
+		if (list != null && list.size() > 0) {
+			if (list.size() == 1) {
+				ZkNodeDataModel m = list.get(0);
+				curatorFramework.setData().forPath(path, m.toBytes());
+			} else {
+				String uuid = "";
+				for (int i = 0; i < list.size(); i++) {
+					ZkNodeDataModel m = list.get(i);
+					if (m.getIsb() == 1) {
+						uuid = m.getUuid();
+						curatorFramework.setData().forPath(path, m.toBytes());
 					} else {
-						String uuid = "";
-						for (int i = 0; i < list.size(); i++) {
-							ZkNodeDataModel m = list.get(i);
-							if (m.getIsb() == 1) {
-								uuid = m.getUuid();
-								curatorFramework.create().creatingParentsIfNeeded().forPath(path, m.toBytes());
-							} else {
-								String subPath = path + "/sd-" + uuid + "-" + i;
-								System.out.println(m.toBytes().length);
-								curatorFramework.create().creatingParentsIfNeeded().forPath(subPath, m.toBytes());
-							}
-						}
+						String subPath = path + "/sd-" + uuid + "-" + i;
+						System.out.println(m.toBytes().length);
+						curatorFramework.setData().forPath(subPath, m.toBytes());
 					}
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -214,7 +293,30 @@ public class ZookeeperClient {
 	 * @param path
 	 *            路径
 	 * @param listen
-	 *            监听类
+	 *            监听类 <br>
+	 *            -----------------------------<br>
+	 *            使用方式 <br> 
+			client.listen("/txt2", (TreeCacheEvent event) -> {
+				ChildData data = event.getData();
+				if (data != null) {
+					switch (event.getType()) {
+					case NODE_ADDED:
+						System.out.println("NODE_ADDED : " + data.getPath() + " 数据:" + new String(data.getData()));
+						break;
+					case NODE_REMOVED:
+						System.out.println("NODE_REMOVED : " + data.getPath() + " 数据:" + new String(data.getData()));
+						break;
+					case NODE_UPDATED:
+						System.out.println("NODE_UPDATED : " + data.getPath() + " 数据:" + new String(data.getData()));
+						break;
+			
+					default:
+						break;
+					}
+				} else {
+					System.out.println("data is null : " + event.getType());
+				}
+			});
 	 */
 	public void listen(String path, ZookeeperListen listen) {
 		// 设置节点的cache
@@ -234,7 +336,7 @@ public class ZookeeperClient {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 获取配置
 	 * 
@@ -259,7 +361,7 @@ public class ZookeeperClient {
 	 * 添加Class中所有的属性到zookeeper中
 	 * 
 	 * @param clazz
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void addClassConfig(Class<?> clazz) throws ZookeeperConfigException {
 		String gPath = ZKCONFIG_HOME_PATH + "/" + clazz.getSimpleName();
@@ -317,9 +419,10 @@ public class ZookeeperClient {
 		}
 		this.create(path, config);
 	}
-	
+
 	/**
 	 * 根据group清除配置
+	 * 
 	 * @param group
 	 * @param key
 	 */
