@@ -29,11 +29,26 @@ public class MqService {
 
 	ZookeeperClient client;
 
+	ThreadPoolExecutor consumerPool;
+	ThreadPoolExecutor sendPool;
+
 	public MqService(MqZkPathConfig config, ZookeeperClient client) {
 		this.config = config;
 		this.client = client;
+		
+		consumerPool = ThreadPoolUtil.newThreadPoolExecutor(config.getReceiveMinThread(), config.getReceiveMaxThread(),
+				config.getReceiveKeepAliveTime());
+		sendPool = ThreadPoolUtil.newThreadPoolExecutor(config.getSendMinThread(), config.getSendMaxThread(),
+				config.getSendKeepAliveTime());
 	}
 
+	/**
+	 * 同步发送消息
+	 * 
+	 * @param topic
+	 * @param content
+	 * @param type
+	 */
 	public void send(String topic, String content, int type) {
 		Message message = new Message();
 		message.setN(content);
@@ -45,6 +60,19 @@ public class MqService {
 
 		saveMessageToZk(message, notice);
 		sendNotice(notice);
+	}
+
+	/**
+	 * 异步发送消息
+	 * 
+	 * @param topic
+	 * @param content
+	 * @param type
+	 */
+	public void syncSend(String topic, String content, int type) {
+		sendPool.execute(() -> {
+			send(topic, content, type);
+		});
 	}
 
 	/**
@@ -118,7 +146,7 @@ public class MqService {
 			// 如果发送给当个，则随机发送至一个消费者
 			if (consumerIds.size() > 1 && notice.getType() == 1) {
 				Random random = new Random();
-				int i = random.nextInt(consumerIds.size() - 1);
+				int i = random.nextInt(consumerIds.size());
 				String id = consumerIds.get(i);
 				consumerIds = new ArrayList<String>();
 				consumerIds.add(id);
@@ -126,12 +154,6 @@ public class MqService {
 		}
 		return consumerIds;
 	}
-
-	public void syncSend(String topic, String content, int type) {
-
-	}
-
-	//ThreadPoolExecutor consumerPool = ThreadPoolUtil.newThreadPoolExecutor(512, 1024, 60);
 
 	/**
 	 * 获取消息
@@ -148,8 +170,8 @@ public class MqService {
 
 			ChildData data = event.getData();
 			if (data != null) {
-				
-				new Thread(() -> {
+				consumerPool.execute(() -> {
+					// new Thread(() -> {
 					switch (event.getType()) {
 					case NODE_ADDED:
 						// System.out.println("NODE_ADDED : " + data.getPath() + " 数据:" + new
@@ -165,7 +187,11 @@ public class MqService {
 									callback.result(content);
 									// 接收到信息，删除通知，删除信息
 									client.delete(data.getPath());
-									client.delete(messagePath);
+									try {
+										client.delete(messagePath);
+									} catch (Exception e) {
+										System.out.println(e);
+									}
 								}
 							} catch (Exception e) {
 								e.printStackTrace();
@@ -175,7 +201,7 @@ public class MqService {
 					default:
 						break;
 					}
-				}).start();
+				});
 
 			} else {
 				System.out.println("data is null : " + event.getType());

@@ -111,13 +111,15 @@ public class ZkSimpleMq {
 
 	/**
 	 * 发送消息<br>
-	 * 所有注册终端都会收到
+	 * 所有注册终端都会收到<br>
+	 * <font color="red">有bug，不能使用</font>
 	 * 
 	 * @param topic
 	 *            主题
 	 * @param content
 	 *            内容
 	 */
+	@Deprecated
 	public void sendToMany(String topic, String content) {
 		service.send(topic, content, 2);
 	}

@@ -6,22 +6,17 @@ import java.util.concurrent.TimeUnit;
 import com.wtds.zk.ZookeeperClient;
 import com.wtds.zk.simplemq.ZkSimpleMq;
 
-public class _Test {
-	static int i = 0;
+public class _Test_ {
+	static int i = 1;
 	static long s1 = 0;
-	static int count1 = 0;
-	static int count2 = 0;
 
 	public static void main(String[] args) throws Exception {
-		t1();
 		t2();
 	}
 
 	public static void t1() {
-
 		new Thread(() -> {
 			try {
-
 				ZookeeperClient client = new ZookeeperClient(
 						"114.55.136.158:2181,114.55.136.158:2182,114.55.136.158:2183");
 
@@ -35,10 +30,9 @@ public class _Test {
 
 				ZkSimpleMq mq = new ZkSimpleMq(client);
 				mq.run("r001");
-
+				
 				mq.receive("test", (String content) -> {
-					count1++;
-					System.out.println("T11111|(" + count1 + ")========>" + content);
+					System.out.println("T11111-========>" + content);
 					if (i == 1) {
 						s1 = System.currentTimeMillis();
 					}
@@ -46,10 +40,8 @@ public class _Test {
 					if (i == 10000) {
 						long s2 = System.currentTimeMillis();
 						System.err.println("time======>" + (s2 - s1));
-						System.err.println("T11111Count========>" + i);
 						i = 1;
 					}
-
 				});
 
 				TimeUnit.SECONDS.sleep(Long.MAX_VALUE);
@@ -58,7 +50,7 @@ public class _Test {
 			}
 		}).start();
 	}
-
+	
 	public static void t2() {
 		new Thread(() -> {
 			try {
@@ -75,10 +67,9 @@ public class _Test {
 
 				ZkSimpleMq mq = new ZkSimpleMq(client);
 				mq.run("r002");
-
+				
 				mq.receive("test", (String content) -> {
-					count2++;
-					System.out.println("T22222|(" + count2 + ")========>" + content);
+					System.out.println("T22222-========>" + content);
 					if (i == 1) {
 						s1 = System.currentTimeMillis();
 					}
@@ -86,10 +77,8 @@ public class _Test {
 					if (i == 10000) {
 						long s2 = System.currentTimeMillis();
 						System.err.println("time======>" + (s2 - s1));
-						System.err.println("T2222Count========>" + i);
 						i = 1;
 					}
-
 				});
 
 				TimeUnit.SECONDS.sleep(Long.MAX_VALUE);
