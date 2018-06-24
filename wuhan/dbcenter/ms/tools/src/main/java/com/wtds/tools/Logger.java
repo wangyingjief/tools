@@ -26,7 +26,7 @@ public class Logger {
 	 */
 	public Logger(String logName) {
 		this.logName = logName;
-		pool = ThreadPoolUtil.newThreadPoolExecutor(1, 1, 60);
+		pool = ThreadPoolUtil.newThreadPoolExecutor(0, 1, 60);
 	}
 
 	String consoleLogPath = System.getProperty("user.dir") + "/log";
