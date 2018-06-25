@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSON;
 import com.wtds.tools.Lz4Util;
 import com.wtds.tools.ReflectUtil;
 import com.wtds.tools.StringUtil;
+import com.wtds.zk.ListenData.Type;
 
 /**
  * zookeeper客户端
@@ -115,14 +116,15 @@ public class ZookeeperClient {
 	public void create(String path, CreateMode createMode) throws Exception {
 		create(path, null, createMode);
 	}
-	
+
 	/**
 	 * 创建节点
+	 * 
 	 * @param path
 	 * @param obj
 	 * @throws Exception
 	 */
-	public void create(String path,Object obj) throws Exception{
+	public void create(String path, Object obj) throws Exception {
 		create(path, JSON.toJSONString(obj), CreateMode.PERSISTENT);
 	}
 
@@ -136,9 +138,10 @@ public class ZookeeperClient {
 	public void create(String path, String data) throws Exception {
 		create(path, data, CreateMode.PERSISTENT);
 	}
-	
+
 	/**
 	 * 创建节点
+	 * 
 	 * @param path
 	 * @param obj
 	 * @param createMode
@@ -147,7 +150,7 @@ public class ZookeeperClient {
 	public void create(String path, Object obj, CreateMode createMode) throws Exception {
 		create(path, JSON.toJSONString(obj), createMode);
 	}
-	
+
 	/**
 	 * 创建节点
 	 * 
@@ -169,9 +172,10 @@ public class ZookeeperClient {
 			}
 		}
 	}
-	
+
 	/**
 	 * 写入数据
+	 * 
 	 * @param path
 	 * @param obj
 	 * @throws Exception
@@ -224,6 +228,19 @@ public class ZookeeperClient {
 		}
 
 		byte[] mData = curatorFramework.getData().forPath(path);
+		data = analysisData(path, mData);
+		return data;
+	}
+
+	/**
+	 * 解析封装后的数据
+	 * @param path
+	 * @param mData
+	 * @return
+	 * @throws Exception 
+	 */
+	private String analysisData(String path, byte[] mData) throws Exception {
+		String data = null;
 		if (mData != null) {
 			String jsonStr = new String(mData, ZookeeperConfig.charset);
 			ZkNodeDataModel m = JSON.parseObject(jsonStr, ZkNodeDataModel.class);
@@ -288,35 +305,25 @@ public class ZookeeperClient {
 	}
 
 	/**
-	 * 监听
+	 * 监听zookeeper原始数据
 	 * 
 	 * @param path
 	 *            路径
 	 * @param listen
 	 *            监听类 <br>
 	 *            -----------------------------<br>
-	 *            使用方式 <br> 
-			client.listen("/txt2", (TreeCacheEvent event) -> {
-				ChildData data = event.getData();
-				if (data != null) {
-					switch (event.getType()) {
-					case NODE_ADDED:
-						System.out.println("NODE_ADDED : " + data.getPath() + " 数据:" + new String(data.getData()));
-						break;
-					case NODE_REMOVED:
-						System.out.println("NODE_REMOVED : " + data.getPath() + " 数据:" + new String(data.getData()));
-						break;
-					case NODE_UPDATED:
-						System.out.println("NODE_UPDATED : " + data.getPath() + " 数据:" + new String(data.getData()));
-						break;
-			
-					default:
-						break;
-					}
-				} else {
-					System.out.println("data is null : " + event.getType());
-				}
-			});
+	 *            使用方式 <br>
+	 *            client.listen("/txt2", (TreeCacheEvent event) -> { ChildData data
+	 *            = event.getData(); if (data != null) { switch (event.getType()) {
+	 *            case NODE_ADDED: System.out.println("NODE_ADDED : " +
+	 *            data.getPath() + " 数据:" + new String(data.getData())); break; case
+	 *            NODE_REMOVED: System.out.println("NODE_REMOVED : " +
+	 *            data.getPath() + " 数据:" + new String(data.getData())); break; case
+	 *            NODE_UPDATED: System.out.println("NODE_UPDATED : " +
+	 *            data.getPath() + " 数据:" + new String(data.getData())); break;
+	 * 
+	 *            default: break; } } else { System.out.println("data is null : " +
+	 *            event.getType()); } });
 	 */
 	public void listen(String path, ZookeeperListen listen) {
 		// 设置节点的cache
@@ -327,6 +334,62 @@ public class ZookeeperClient {
 			@Override
 			public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception {
 				listen.event(event);
+			}
+		});
+		// 开始监听
+		try {
+			treeCache.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 监控封装后的数据
+	 * 
+	 * @param path
+	 * @param listen
+	 */
+	public void listenData(String path, ZookeeperListenData listen) {
+		ZookeeperClient _this = this;
+		// 设置节点的cache
+		@SuppressWarnings("resource")
+		TreeCache treeCache = new TreeCache(curatorFramework, path);
+		// 设置监听器和处理过程
+		treeCache.getListenable().addListener(new TreeCacheListener() {
+			@Override
+			public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception {
+				ChildData data = event.getData();
+				if (data != null) {
+					ListenData lData = new ListenData();
+					byte[] resultData = null;
+					switch (event.getType()) {
+					case NODE_ADDED:
+						lData.setType(Type.add);
+						lData.setPath(data.getPath());
+						resultData = data.getData();
+						break;
+					case NODE_REMOVED:
+						lData.setType(Type.delete);
+						lData.setPath(data.getPath());
+						resultData = data.getData();
+						break;
+					case NODE_UPDATED:
+						lData.setType(Type.update);
+						lData.setPath(data.getPath());
+						resultData = data.getData();
+						break;
+					default:
+						break;
+					}
+					
+					if (resultData != null) {
+						String value = _this.analysisData(lData.getPath(), resultData);
+						lData.setData(value);
+					}
+
+					listen.event(lData);
+				}
 			}
 		});
 		// 开始监听
