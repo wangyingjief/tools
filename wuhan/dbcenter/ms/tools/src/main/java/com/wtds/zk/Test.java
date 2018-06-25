@@ -22,7 +22,7 @@ public class Test {
 		List<String> nodes0 = client.getCuratorFramework().getChildren().forPath("/");
 		System.out.println("-->");
 		System.out.println(JSON.toJSONString(nodes0));
-		
+
 		client.listen("/txt2/a/c/d", (TreeCacheEvent event) -> {
 			ChildData data = event.getData();
 			if (data != null) {
@@ -43,12 +43,15 @@ public class Test {
 				System.out.println("data is null : " + event.getType());
 			}
 		});
-		
+
 		client.delete("/txt2/a/c/d");
 		client.create("/txt2/a/c/d", "测试");
 		client.create("/txt2/a/c/d", "测试2");
 		System.out.println("-->" + client.getData("/txt2/a/c/d"));
 
+		client.listenData("", (ListenData data) -> {
+			
+		});
 	}
 
 	public static void t2() throws UnsupportedEncodingException {
