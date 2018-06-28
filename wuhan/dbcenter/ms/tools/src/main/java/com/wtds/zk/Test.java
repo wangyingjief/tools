@@ -3,6 +3,7 @@ package com.wtds.zk;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
@@ -14,7 +15,10 @@ import com.wtds.tools.Lz4Util;
 
 public class Test {
 	public static void main(String[] args) throws Exception {
-		t3();
+		ZookeeperClient client = new ZookeeperClient("114.55.136.158:2181,114.55.136.158:2182,114.55.136.158:2183");
+		client.getData("/nova/data/clean/mapping");
+		TimeUnit.SECONDS.sleep(Long.MAX_VALUE);
+		//t3();
 	}
 
 	public static void t3() throws Exception {
