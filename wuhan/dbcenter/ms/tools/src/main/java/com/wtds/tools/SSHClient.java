@@ -11,7 +11,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
 
-public class Shell {
+public class SSHClient {
 	// 远程主机的ip地址
 	private String ip;
 	// 远程主机登录用户名
@@ -19,22 +19,41 @@ public class Shell {
 	// 远程主机的登录密码
 	private String password;
 	// 设置ssh连接的远程端口
-	public static final int DEFAULT_SSH_PORT = 22;
-	// 保存输出内容的容器
-	private ArrayList<String> stdout;
+	public int DEFAULT_SSH_PORT = 22;
 
-	/**
-	 * 初始化登录信息
-	 * 
-	 * @param ip
-	 * @param username
-	 * @param password
-	 */
-	public Shell(final String ip, final String username, final String password) {
+	JSch jsch;
+
+	SSHUserInfo userInfo;
+
+	Session session;
+
+	Channel channel;
+
+	ChannelExec channelExec;
+	
+	public boolean isConnected() {
+		return session.isConnected();
+	}
+
+	public void connection(String ip, int port, String username, String password) {
 		this.ip = ip;
 		this.username = username;
 		this.password = password;
-		stdout = new ArrayList<String>();
+		this.DEFAULT_SSH_PORT = port;
+		
+		jsch = new JSch();
+		userInfo = new SSHUserInfo();
+
+		try {
+			// 创建session并且打开连接，因为创建session之后要主动打开连接
+			session = jsch.getSession(username, ip, DEFAULT_SSH_PORT);
+			session.setPassword(password);
+			session.setUserInfo(userInfo);
+			session.connect();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -43,112 +62,104 @@ public class Shell {
 	 * @param command
 	 * @return
 	 */
-	public int execute(final String command) {
-		int returnCode = 0;
-		JSch jsch = new JSch();
-		MyUserInfo userInfo = new MyUserInfo();
-
+	public String execute(final String command) {
+		String result = "";
+		// 保存输出内容的容器
+		ArrayList<String> stdout = new ArrayList<String>();
 		try {
-			// 创建session并且打开连接，因为创建session之后要主动打开连接
-			Session session = jsch.getSession(username, ip, DEFAULT_SSH_PORT);
-			session.setPassword(password);
-			session.setUserInfo(userInfo);
-			session.connect();
-
 			// 打开通道，设置通道类型，和执行的命令
-			Channel channel = session.openChannel("exec");
-			ChannelExec channelExec = (ChannelExec) channel;
+			channel = session.openChannel("exec");
+			channelExec = (ChannelExec) channel;
+
 			channelExec.setCommand(command);
 
 			channelExec.setInputStream(null);
+
 			BufferedReader input = new BufferedReader(new InputStreamReader(channelExec.getInputStream()));
 
 			channelExec.connect();
-			System.out.println("The remote command is :" + command);
 
 			// 接收远程服务器执行命令的结果
 			String line;
 			while ((line = input.readLine()) != null) {
-				stdout.add(line);
+				stdout.add(line+"\r\n");
 			}
 			input.close();
 
 			// 得到returnCode
-			if (channelExec.isClosed()) {
-				returnCode = channelExec.getExitStatus();
+			// if (channelExec.isClosed()) {
+			// returnCode = channelExec.getExitStatus();
+			// }
+
+			for (String str : stdout) {
+				result += str;
 			}
 
 			// 关闭通道
 			channelExec.disconnect();
-			// 关闭session
-			session.disconnect();
-
 		} catch (JSchException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return returnCode;
+		return result;
 	}
 
-	/**
-	 * get stdout
-	 * 
-	 * @return
-	 */
-	public ArrayList<String> getStandardOutput() {
-		return stdout;
+	public void close() {
+
+		// 关闭session
+		session.disconnect();
 	}
 
 	public static void main(final String[] args) {
-		Shell shell = new Shell("114.55.136.158", "root", "pass12#$");
-		shell.execute("find / -name \"*jdk*\"");
-		
-		ArrayList<String> stdout = shell.getStandardOutput();
-		for (String str : stdout) {
-			System.out.println(str);
-		}
+		SSHClient shell = new SSHClient();
+		shell.connection("114.55.136.158", 22, "root", "pass12#$");
+		String s1 = shell.execute("cd /opt ;pwd;");
+		// String s3 = shell.execute("pwd");
+		System.out.println(s1);
+		// System.out.println(s3);
+		shell.close();
 	}
 }
 
-class MyUserInfo implements UserInfo {
+class SSHUserInfo implements UserInfo {
 
 	@Override
 	public String getPassphrase() {
 		// TODO Auto-generated method stub
-		System.out.println("MyUserInfo.getPassphrase()");
+//		System.out.println("SSHUserInfo.getPassphrase()");
 		return null;
 	}
 
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		System.out.println("MyUserInfo.getPassword()");
+//		System.out.println("SSHUserInfo.getPassword()");
 		return null;
 	}
 
 	@Override
 	public boolean promptPassphrase(String arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("MyUserInfo.promptPassphrase()");
-		System.out.println(arg0);
+//		System.out.println("SSHUserInfo.promptPassphrase()");
+//		System.out.println(arg0);
 		return false;
 	}
 
 	@Override
 	public boolean promptPassword(String arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("MyUserInfo.promptPassword()");
-		System.out.println(arg0);
+//		System.out.println("SSHUserInfo.promptPassword()");
+//		System.out.println(arg0);
 		return false;
 	}
 
 	@Override
 	public boolean promptYesNo(String arg0) {
 		// TODO Auto-generated method stub'
-		System.out.println("MyUserInfo.promptYesNo()");
-		System.out.println(arg0);
+//		System.out.println("SSHUserInfo.promptYesNo()");
+//		System.out.println(arg0);
 		if (arg0.contains("The authenticity of host")) {
 			return true;
 		}
@@ -158,7 +169,7 @@ class MyUserInfo implements UserInfo {
 	@Override
 	public void showMessage(String arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("MyUserInfo.showMessage()");
+//		System.out.println("SSHUserInfo.showMessage()");
 	}
 
 }

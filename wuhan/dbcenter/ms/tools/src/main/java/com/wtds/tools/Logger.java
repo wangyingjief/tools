@@ -7,18 +7,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import javax.sound.midi.VoiceStatus;
+
 /**
  * 打印日志
  * 
  * @author wyj
  */
 public class Logger {
+	
+	private boolean consolePrint = true;
 
 	public Logger() {
 		this.logName = "logger";
+		checkPath();
 	}
-	
-	private boolean consolePrint = true;
 	
 	/**
 	 * @param logName
@@ -26,7 +29,22 @@ public class Logger {
 	 */
 	public Logger(String logName) {
 		this.logName = logName;
+		checkPath();
 		pool = ThreadPoolUtil.newThreadPoolExecutor(0, 1, 60);
+	}
+	
+	/**
+	 * 检查文件夹是否存在
+	 */
+	public void checkPath() {
+		String filePath = consoleLogPath;
+		String fileName = filePath + "/" + logName + ".log";
+		File f = new File(fileName);
+		File path = new File(f.getParent());
+		// 如果文件夹不存在则创建
+		if (!path.exists() && !path.isDirectory()) {
+			path.mkdirs();
+		}
 	}
 
 	String consoleLogPath = System.getProperty("user.dir") + "/log";
@@ -54,13 +72,8 @@ public class Logger {
 		String fileName = filePath + "/" + logName + ".log";
 
 		try {
-			File path = new File(filePath);
-			// 如果文件夹不存在则创建
-			if (!path.exists() && !path.isDirectory()) {
-				path.mkdir();
-			}
-
 			File f = new File(fileName);
+			
 			String lts = formatter2.format(f.lastModified());
 			if (!dayStr.equals(lts)) {
 				String rfileName = filePath + "/" + logName + "_" + lts + ".log";
