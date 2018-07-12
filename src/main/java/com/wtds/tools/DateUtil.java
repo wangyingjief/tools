@@ -1624,8 +1624,8 @@ public class DateUtil {
 		String a4 = "[0-9]{4}-[0-9]{2}-[0-9]{2}";// yyyy-MM-dd
 		String a5 = "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}";// yyyy-MM-dd HH:mm
 		String a6 = "^(^\\d{4}年\\d{1,2}月\\d{1,2}日$)$";
-		String a7 = "[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}";// yyyy/MM/dd HH:mm:ss
-		String a8 = "[0-9]{4}/[0-9]{2}/[0-9]{2}";// yyyy/MM/dd
+		String a7 = "[0-9]{4}/[0-9]{1,2}/[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}";// yyyy/MM/dd HH:mm:ss
+		String a8 = "[0-9]{4}/[0-9]{1,2}/[0-9]{1,2}";// yyyy/MM/dd
 		boolean datea1 = Pattern.compile(a1).matcher(date).matches();
 		if (datea1) {
 			return "yyyyMMddHHmmss";
@@ -1636,7 +1636,7 @@ public class DateUtil {
 		}
 		boolean datea3 = Pattern.compile(a3).matcher(date).matches();
 		if (datea3) {
-			return "yyyy-MM-dd ";
+			return "yyyy-MM-dd HH:mm:ss";
 		}
 		boolean datea4 = Pattern.compile(a4).matcher(date).matches();
 		if (datea4) {
