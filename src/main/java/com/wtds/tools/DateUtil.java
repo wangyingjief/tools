@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * 提供两种用法 1.利用public static method进行日期格式的转换 2.利用内容的Calendar object
@@ -1610,4 +1611,53 @@ public class DateUtil {
 		return date;
 	}
 	
+	/**
+	 * 根据时间获取格式
+	 * @param date
+	 * @return
+	 */
+	public static String getDatetimeFormat(String date) {
+		date = date.trim();
+		String a1 = "[0-9]{4}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}";// yyyyMMddHHmmss
+		String a2 = "[0-9]{4}[0-9]{2}[0-9]{2}";// yyyyMMdd
+		String a3 = "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}";// yyyy-MM-dd HH:mm:ss
+		String a4 = "[0-9]{4}-[0-9]{2}-[0-9]{2}";// yyyy-MM-dd
+		String a5 = "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}";// yyyy-MM-dd HH:mm
+		String a6 = "^(^\\d{4}年\\d{1,2}月\\d{1,2}日$)$";
+		String a7 = "[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}";// yyyy/MM/dd HH:mm:ss
+		String a8 = "[0-9]{4}/[0-9]{2}/[0-9]{2}";// yyyy/MM/dd
+		boolean datea1 = Pattern.compile(a1).matcher(date).matches();
+		if (datea1) {
+			return "yyyyMMddHHmmss";
+		}
+		boolean datea2 = Pattern.compile(a2).matcher(date).matches();
+		if (datea2) {
+			return "yyyyMMdd";
+		}
+		boolean datea3 = Pattern.compile(a3).matcher(date).matches();
+		if (datea3) {
+			return "yyyy-MM-dd ";
+		}
+		boolean datea4 = Pattern.compile(a4).matcher(date).matches();
+		if (datea4) {
+			return "yyyy-MM-dd";
+		}
+		boolean datea5 = Pattern.compile(a5).matcher(date).matches();
+		if (datea5) {
+			return "yyyy-MM-dd HH:mm";
+		}
+		boolean data6 = Pattern.compile(a6).matcher(date).matches();
+		if(data6) {
+			return "yyyy年MM月dd日";
+		}
+		boolean data7 = Pattern.compile(a7).matcher(date).matches();
+		if(data7) {
+			return "yyyy/MM/dd HH:mm:ss";
+		}
+		boolean data8 = Pattern.compile(a8).matcher(date).matches();
+		if(data8) {
+			return "yyyy/MM/dd";
+		}
+		return "";
+	}
 }
