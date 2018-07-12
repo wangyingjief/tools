@@ -16,6 +16,7 @@ import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 
 import com.alibaba.fastjson.JSON;
+import com.wtds.tools.Check;
 import com.wtds.tools.Lz4Util;
 import com.wtds.tools.ReflectUtil;
 import com.wtds.tools.StringUtil;
@@ -245,29 +246,33 @@ public class ZookeeperClient {
 		if (mData != null) {
 			String jsonStr = new String(mData, ZookeeperConfig.charset);
 			if (!StringUtil.isEmpty(jsonStr)) {
-				ZkNodeDataModel m = JSON.parseObject(jsonStr, ZkNodeDataModel.class);
-				// 判断是否独立数据
-				if (m.getIsb() == 0) {
-					byte[] byteData = null;
-					// 判断是否压缩
-					if (m.isLz4()) {
-						byteData = Lz4Util.decompressorByte(m.getData(), m.getLz4BeforeSize());
-					} else {
-						byteData = m.getData();
+				if (Check.isIP(jsonStr)) {
+					data = jsonStr;
+				} else {
+					ZkNodeDataModel m = JSON.parseObject(jsonStr, ZkNodeDataModel.class);
+					// 判断是否独立数据
+					if (m.getIsb() == 0) {
+						byte[] byteData = null;
+						// 判断是否压缩
+						if (m.isLz4()) {
+							byteData = Lz4Util.decompressorByte(m.getData(), m.getLz4BeforeSize());
+						} else {
+							byteData = m.getData();
+						}
+						System.out.println("2-" + byteData.length);
+						data = new String(byteData, ZookeeperConfig.charset);
+					} else if (m.getIsb() == 1) {
+						List<ZkNodeDataModel> submList = new ArrayList<ZkNodeDataModel>();
+						submList.add(m);
+						for (int i = 1; i <= m.getMaxSubNode(); i++) {
+							String subPath = path + "/sd-" + m.getUuid() + "-" + i;
+							byte[] subData = curatorFramework.getData().forPath(subPath);
+							String subJson = new String(subData, ZookeeperConfig.charset);
+							ZkNodeDataModel subm = JSON.parseObject(subJson, ZkNodeDataModel.class);
+							submList.add(subm);
+						}
+						data = ZkNodeDataModel.deDataModel(submList);
 					}
-					System.out.println("2-" + byteData.length);
-					data = new String(byteData, ZookeeperConfig.charset);
-				} else if (m.getIsb() == 1) {
-					List<ZkNodeDataModel> submList = new ArrayList<ZkNodeDataModel>();
-					submList.add(m);
-					for (int i = 1; i <= m.getMaxSubNode(); i++) {
-						String subPath = path + "/sd-" + m.getUuid() + "-" + i;
-						byte[] subData = curatorFramework.getData().forPath(subPath);
-						String subJson = new String(subData, ZookeeperConfig.charset);
-						ZkNodeDataModel subm = JSON.parseObject(subJson, ZkNodeDataModel.class);
-						submList.add(subm);
-					}
-					data = ZkNodeDataModel.deDataModel(submList);
 				}
 			}
 		}
