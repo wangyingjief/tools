@@ -15,14 +15,14 @@ import javax.sound.midi.VoiceStatus;
  * @author wyj
  */
 public class Logger {
-	
+
 	private boolean consolePrint = true;
 
 	public Logger() {
 		this.logName = "logger";
 		checkPath();
 	}
-	
+
 	/**
 	 * @param logName
 	 *            日志名称
@@ -32,7 +32,7 @@ public class Logger {
 		checkPath();
 		pool = ThreadPoolUtil.newThreadPoolExecutor(0, 1, 60);
 	}
-	
+
 	/**
 	 * 检查文件夹是否存在
 	 */
@@ -73,7 +73,7 @@ public class Logger {
 
 		try {
 			File f = new File(fileName);
-			
+
 			String lts = formatter2.format(f.lastModified());
 			if (!dayStr.equals(lts)) {
 				String rfileName = filePath + "/" + logName + "_" + lts + ".log";
@@ -135,8 +135,12 @@ public class Logger {
 	 * @param info
 	 */
 	public void info(String info) {
-		if(consolePrint){
-			System.out.println(info);
+		if (consolePrint) {
+			if (info.length() > 256) {
+				System.out.println(info.substring(0, 256) + "...");
+			} else {
+				System.out.println(info);
+			}
 		}
 		info(info, false);
 	}
@@ -148,7 +152,5 @@ public class Logger {
 	public void setConsolePrint(boolean consolePrint) {
 		this.consolePrint = consolePrint;
 	}
-	
-	
 
 }
