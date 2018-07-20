@@ -106,6 +106,39 @@ public class Sftp {
 	}
 
 	/**
+	 * 上传文件夹至指定的远程文件夹中(如果远程存在，会覆盖)
+	 * 
+	 * @param localDir
+	 * @param remoteDir
+	 * @throws Exception
+	 */
+	public void uploadDir(String localDir, String remoteDir) throws Exception {
+		File local = new File(localDir);
+		if (!local.isDirectory()) {
+			throw new Exception("Error : Non Folder!");
+		}
+		// List<String> remoteFile = this.listFiles(uploadDir);
+		// if(remoteFile != null && remoteFile.size() > 0) {
+		// throw new Exception("Error : Remote Exist Folder!");
+		// }
+		// 获取指定本地目录所有文件
+		List<File> allFile = new ArrayList<File>();
+		FileUtil.listFile(local, allFile);
+		if (allFile != null && allFile.size() > 0) {
+			for (File f : allFile) {
+				String rDir = "";
+				if (local.getParent().equals("/") || local.getParent().equals("\\")) {
+					rDir = remoteDir + f.getParent();
+				} else {
+					rDir = remoteDir + f.getParent().replace(local.getParent(), "");
+				}
+				this.upload(rDir, f.getPath());
+				System.out.println(f.getName() + " > " + rDir + "/" + f.getName() + "   ok!");
+			}
+		}
+	}
+
+	/**
 	 * 上传文件
 	 * 
 	 * @param directory
@@ -125,7 +158,7 @@ public class Sftp {
 
 					String[] folders = directory.split("/");
 					// 返回的结果数组比预计的数组多了一个元素，第一个元素为空
-					//System.out.println(folders.length);
+					// System.out.println(folders.length);
 					String path = "";
 					// 第一个元素是空字符串，所以从第二个元素开始遍历，即i=1
 					for (int i = 1; i < folders.length; i++) {
@@ -314,9 +347,20 @@ public class Sftp {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Sftp sftp = new Sftp();
-		sftp.connection("114.55.136.158", 22, "root", "pass12#$");
-		sftp.upload("/opt/test/a/b/c", System.getProperty("user.dir") + "/config/db.properties");
-		sftp.close();
+		// Sftp sftp = new Sftp();
+		// sftp.connection("114.55.136.158", 22, "root", "pass12#$");
+		// sftp.upload("/opt/test/a/b/c", System.getProperty("user.dir") +
+		// "/config/db.properties");
+		// sftp.close();
+		String local = "/Users/joymting/workspace/dbcenter/ms/data-clean/P0-NovaDataClean/P01-NovaDataClean-Manager/target/web";
+		List<File> allFile = new ArrayList<File>();
+		FileUtil.listFile(new File(local), allFile);
+		if (allFile != null && allFile.size() > 0) {
+			for (File f : allFile) {
+				String remoteDir = f.getParent().replace(local, "");
+				System.out.println(remoteDir);
+				// this.upload(uploadDir, f.getPath());
+			}
+		}
 	}
 }
