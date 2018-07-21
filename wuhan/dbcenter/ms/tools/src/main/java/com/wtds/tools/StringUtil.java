@@ -1,12 +1,10 @@
 package com.wtds.tools;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -131,39 +129,40 @@ public class StringUtil {
 
 	public static boolean debug = false;
 	static {
-//		try {
-//			ResourceBundle shopResource = ResourceBundle.getBundle("resources.shopapplication", new Locale("", ""));
-//			String debugstr = shopResource.getString("debug");
-//			if ("true".equals(debugstr)) {
-//				debug = true;
-//			}
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
+		// try {
+		// ResourceBundle shopResource =
+		// ResourceBundle.getBundle("resources.shopapplication", new Locale("", ""));
+		// String debugstr = shopResource.getString("debug");
+		// if ("true".equals(debugstr)) {
+		// debug = true;
+		// }
+		// } catch (Exception ex) {
+		// ex.printStackTrace();
+		// }
 	}
 
 	// ---Public general String handling methods--------------------------
 
-
 	/**
 	 * 替换特殊字符为Unicode编码,防止注入
+	 * 
 	 * @param str
 	 * @return
 	 */
-	public static String replaceChar(String str){
-		return str.replaceAll("\\#", "\\$\\$\\$j\\$\\$\\$").replaceAll("\\&", "\\$\\$\\$h\\$\\$\\$").replaceAll("-", "&#45;")
-		.replaceAll(";", "\\$\\$\\$f\\$\\$\\$").replaceAll(" ", "&#32;")
-		.replaceAll("!", "&#33;").replaceAll("@", "&#64;").replaceAll("'", "&#39;").replaceAll("\"", "&#34;")
-		.replaceAll("%", "&#37;").replace("^", "&#94;").replaceAll("\\*", "&#42;").replaceAll("\\(", "&#40;")
-		.replaceAll("\\)", "&#41;").replaceAll("=", "&#61;").replaceAll("\\|", "&#124;").replaceAll("<", "&#60;")
-		.replaceAll(">", "&#62;").replaceAll("\\?", "&#63;").replaceAll("/", "&#47;").replaceAll("\\\\", "&#92;")
-		.replaceAll("\\.", "&#46;").replaceAll("`", "&#96;").replaceAll("~", "&#126;").replaceAll(",", "&#44;")
-		.replaceAll("\\+", "&#43;").replaceAll("_", "&#95;").replaceAll("\\{", "&#123;").replaceAll("\\}", "&#125;")
-		.replaceAll("\\[", "&#91;").replaceAll("\\]", "&#93;").replaceAll(":", "&#58;")
-		.replaceAll("\\$\\$\\$j\\$\\$\\$", "&#35;").replaceAll("\\$\\$\\$h\\$\\$\\$", "&#38;")
-		.replaceAll("\\$\\$\\$f\\$\\$\\$", "&#59;");
-	}	
-	
+	public static String replaceChar(String str) {
+		return str.replaceAll("\\#", "\\$\\$\\$j\\$\\$\\$").replaceAll("\\&", "\\$\\$\\$h\\$\\$\\$")
+				.replaceAll("-", "&#45;").replaceAll(";", "\\$\\$\\$f\\$\\$\\$").replaceAll(" ", "&#32;")
+				.replaceAll("!", "&#33;").replaceAll("@", "&#64;").replaceAll("'", "&#39;").replaceAll("\"", "&#34;")
+				.replaceAll("%", "&#37;").replace("^", "&#94;").replaceAll("\\*", "&#42;").replaceAll("\\(", "&#40;")
+				.replaceAll("\\)", "&#41;").replaceAll("=", "&#61;").replaceAll("\\|", "&#124;")
+				.replaceAll("<", "&#60;").replaceAll(">", "&#62;").replaceAll("\\?", "&#63;").replaceAll("/", "&#47;")
+				.replaceAll("\\\\", "&#92;").replaceAll("\\.", "&#46;").replaceAll("`", "&#96;")
+				.replaceAll("~", "&#126;").replaceAll(",", "&#44;").replaceAll("\\+", "&#43;").replaceAll("_", "&#95;")
+				.replaceAll("\\{", "&#123;").replaceAll("\\}", "&#125;").replaceAll("\\[", "&#91;")
+				.replaceAll("\\]", "&#93;").replaceAll(":", "&#58;").replaceAll("\\$\\$\\$j\\$\\$\\$", "&#35;")
+				.replaceAll("\\$\\$\\$h\\$\\$\\$", "&#38;").replaceAll("\\$\\$\\$f\\$\\$\\$", "&#59;");
+	}
+
 	/**
 	 * 
 	 * @param str
@@ -174,8 +173,8 @@ public class StringUtil {
 	}
 
 	/**
-	 * Returns an empty String (i.e. a String which consists of only blanks) of
-	 * the specified length.
+	 * Returns an empty String (i.e. a String which consists of only blanks) of the
+	 * specified length.
 	 * 
 	 * @param len
 	 *            length of String to return.
@@ -197,8 +196,8 @@ public class StringUtil {
 	}
 
 	/**
-	 * Returns a String of the specified length which consists of only Zeros
-	 * (ASCII 48).
+	 * Returns a String of the specified length which consists of only Zeros (ASCII
+	 * 48).
 	 * 
 	 * @param len
 	 *            length of String to return.
@@ -220,8 +219,8 @@ public class StringUtil {
 	}
 
 	/**
-	 * Pads the String s to the given length by inserting blanks at the left
-	 * side. If s is longer than len, the String remains unchanged.
+	 * Pads the String s to the given length by inserting blanks at the left side.
+	 * If s is longer than len, the String remains unchanged.
 	 * 
 	 * @param s
 	 *            String to pad
@@ -234,9 +233,9 @@ public class StringUtil {
 	}
 
 	/**
-	 * Pads the String s to the given length by inserting blanks at the left
-	 * side. If s is longer than len and trim is set to true, the result is
-	 * truncated to the given length.
+	 * Pads the String s to the given length by inserting blanks at the left side.
+	 * If s is longer than len and trim is set to true, the result is truncated to
+	 * the given length.
 	 * 
 	 * @param s
 	 *            String to pad
@@ -260,8 +259,8 @@ public class StringUtil {
 	}
 
 	/**
-	 * Pads the String s to the given length by inserting blanks at the right
-	 * end. If s is longer than len, the String remains unchanged.
+	 * Pads the String s to the given length by inserting blanks at the right end.
+	 * If s is longer than len, the String remains unchanged.
 	 * 
 	 * @param s
 	 *            String to pad
@@ -274,9 +273,9 @@ public class StringUtil {
 	}
 
 	/**
-	 * Pads the String s to the given length by inserting blanks at the right
-	 * end. If s is longer than len and trim is true, the result is truncated to
-	 * the given length.
+	 * Pads the String s to the given length by inserting blanks at the right end.
+	 * If s is longer than len and trim is true, the result is truncated to the
+	 * given length.
 	 * 
 	 * @param s
 	 *            String to pad
@@ -320,8 +319,8 @@ public class StringUtil {
 	}
 
 	/**
-	 * Converts the integer value into a String which is left-padded with zeros
-	 * to the given length.
+	 * Converts the integer value into a String which is left-padded with zeros to
+	 * the given length.
 	 * 
 	 * @param value
 	 *            integer value to pad
@@ -344,16 +343,16 @@ public class StringUtil {
 	// ---Public String formatting methods--------------------------------
 
 	/**
-	 * Formats the value according to the given format specifier. The format
-	 * char may be any character out of "dxXoufeEgGc". If the format char is in
-	 * "feEgG", the value is casted to a double, if it is "c", it is casted to a
-	 * char, before actually calling the corresponding formatting method.
+	 * Formats the value according to the given format specifier. The format char
+	 * may be any character out of "dxXoufeEgGc". If the format char is in "feEgG",
+	 * the value is casted to a double, if it is "c", it is casted to a char, before
+	 * actually calling the corresponding formatting method.
 	 * 
 	 * @param format
 	 *            format specifier according to the rules mentioned above
 	 * @param value
-	 *            integer value which should be formatted as specified in the
-	 *            format argument
+	 *            integer value which should be formatted as specified in the format
+	 *            argument
 	 * @return The formatted value as a String. If the format char is "s", the
 	 *         return value is the error message "<***cannot convert value***>".
 	 */
@@ -379,19 +378,18 @@ public class StringUtil {
 	}
 
 	/**
-	 * Formats the value according to the given format specifier. The format
-	 * char may be any character out of "dxXoufeEgG". If the format char is in
-	 * "dxXou", the value is casted to an int before actually calling the
-	 * corresponding formatting method.
+	 * Formats the value according to the given format specifier. The format char
+	 * may be any character out of "dxXoufeEgG". If the format char is in "dxXou",
+	 * the value is casted to an int before actually calling the corresponding
+	 * formatting method.
 	 * 
 	 * @param format
 	 *            format specifier according to the rules mentioned above
 	 * @param value
-	 *            double value which should be formatted as specified in the
-	 *            format argument
-	 * @return The formatted value as a String. If the format char is "c" or
-	 *         "s", the return value is the error message "<***cannot convert
-	 *         value***>".
+	 *            double value which should be formatted as specified in the format
+	 *            argument
+	 * @return The formatted value as a String. If the format char is "c" or "s",
+	 *         the return value is the error message "<***cannot convert value***>".
 	 */
 	public static String getFormatted(String format, double value) {
 		String ret;
@@ -413,20 +411,18 @@ public class StringUtil {
 	}
 
 	/**
-	 * Formats the value according to the given format specifier. The format
-	 * char may be any character out of "csdxXou". If the format char is "s",
-	 * the value is considered a String of length 1. If it is in "dxXou", the
-	 * value is casted to an int before actually calling the corresponding
-	 * formatting method.
+	 * Formats the value according to the given format specifier. The format char
+	 * may be any character out of "csdxXou". If the format char is "s", the value
+	 * is considered a String of length 1. If it is in "dxXou", the value is casted
+	 * to an int before actually calling the corresponding formatting method.
 	 * 
 	 * @param format
 	 *            format specifier according to the rules mentioned above
 	 * @param value
 	 *            character which should be formatted as specified in the format
 	 *            argument
-	 * @return The formatted value as a String. If the format char is in
-	 *         "feEgG", the return value is the error message "<***cannot
-	 *         convert value***>".
+	 * @return The formatted value as a String. If the format char is in "feEgG",
+	 *         the return value is the error message "<***cannot convert value***>".
 	 */
 	public static String getFormatted(String format, char value) {
 		String ret;
@@ -450,17 +446,17 @@ public class StringUtil {
 	}
 
 	/**
-	 * Formats the value according to the given format specifier. The format
-	 * char has to be the character "s".
+	 * Formats the value according to the given format specifier. The format char
+	 * has to be the character "s".
 	 * 
 	 * @param format
 	 *            format specifier according to the rules mentioned above
 	 * @param value
-	 *            String value which should be formatted as specified in the
-	 *            format argument
-	 * @return The formatted value as a String. If the format char is different
-	 *         from "s", the return value is the error message "<***cannot
-	 *         convert value***>".
+	 *            String value which should be formatted as specified in the format
+	 *            argument
+	 * @return The formatted value as a String. If the format char is different from
+	 *         "s", the return value is the error message "<***cannot convert
+	 *         value***>".
 	 */
 	public static String getFormatted(String format, String value) {
 		String ret;
@@ -480,11 +476,11 @@ public class StringUtil {
 	}
 
 	/**
-	 * This method could be used to run the format parser on the first argument
-	 * and then return the format specification as a String. It is thought for
-	 * debugging purposes and need not be called under normal circumstances.
-	 * It's declared public because the test engine is in a different package
-	 * and thus can not call package level methods.
+	 * This method could be used to run the format parser on the first argument and
+	 * then return the format specification as a String. It is thought for debugging
+	 * purposes and need not be called under normal circumstances. It's declared
+	 * public because the test engine is in a different package and thus can not
+	 * call package level methods.
 	 * 
 	 * @param format
 	 *            format specifier according to the rules mentioned above
@@ -498,10 +494,10 @@ public class StringUtil {
 
 	// ---Private methods-------------------------------------------------
 	/**
-	 * Converts the integer value into a String according to the format encoded
-	 * in fp. This method supports the format specifiers "d", "u", "x" and "o".
-	 * It interprets the modifiers "alignleft", "plussign", "fieldlen",
-	 * "padzero" and "decimals".
+	 * Converts the integer value into a String according to the format encoded in
+	 * fp. This method supports the format specifiers "d", "u", "x" and "o". It
+	 * interprets the modifiers "alignleft", "plussign", "fieldlen", "padzero" and
+	 * "decimals".
 	 */
 	private static String toString(int value, FormatParas fp) {
 		String ret = "";
@@ -557,16 +553,16 @@ public class StringUtil {
 	}
 
 	/**
-	 * Converts the double value into a String according to the format encoded
-	 * in fp. This method supports the format specifiers "f", "e", "E", "g" nd
-	 * "G". It interprets the modifiers "alignleft", "plussign", "fieldlen",
-	 * "padzero" and "decimals".
+	 * Converts the double value into a String according to the format encoded in
+	 * fp. This method supports the format specifiers "f", "e", "E", "g" nd "G". It
+	 * interprets the modifiers "alignleft", "plussign", "fieldlen", "padzero" and
+	 * "decimals".
 	 * 
-	 * The floating point formatter always transforms the value into the
-	 * normalized canonical form "0.xy" where the whole part is 0 and the first
-	 * digit x of the fractional part is not 0. The implementation relies on the
-	 * fact that the implicit Java String conversion for normalized values
-	 * always returns a String in the format mentioned above.
+	 * The floating point formatter always transforms the value into the normalized
+	 * canonical form "0.xy" where the whole part is 0 and the first digit x of the
+	 * fractional part is not 0. The implementation relies on the fact that the
+	 * implicit Java String conversion for normalized values always returns a String
+	 * in the format mentioned above.
 	 */
 	private static String toString(double value, FormatParas fp) {
 		String ret = "";
@@ -704,8 +700,8 @@ public class StringUtil {
 	}
 
 	/**
-	 * Converts the char value into a String according to the format encoded in
-	 * fp. This method supports the format specifier "c" with the "fieldlen" and
+	 * Converts the char value into a String according to the format encoded in fp.
+	 * This method supports the format specifier "c" with the "fieldlen" and
 	 * "alignleft" modifiers.
 	 */
 	private static String toString(char value, FormatParas fp) {
@@ -721,9 +717,9 @@ public class StringUtil {
 	}
 
 	/**
-	 * Formats the String value according to the format encoded in fp. This
-	 * method supports the format specifier "s" with the "fieldlen" and
-	 * "alignleft" modifiers.
+	 * Formats the String value according to the format encoded in fp. This method
+	 * supports the format specifier "s" with the "fieldlen" and "alignleft"
+	 * modifiers.
 	 */
 	private static String toString(String value, FormatParas fp) {
 		if (fp.fieldlen > 0) {
@@ -737,18 +733,18 @@ public class StringUtil {
 	}
 
 	/**
-	 * This method is used to parse the format String and to split it up into
-	 * three parts:
+	 * This method is used to parse the format String and to split it up into three
+	 * parts:
 	 * <ol>
 	 * <li>All characters which occur before the first format specifier will be
 	 * stored in the "prefix" component.
-	 * <li>All characters which occur after the end of the first format
-	 * specifier will be stored in the "suffix" component.
-	 * <li>All charactcers which comprise the first format specifiert are
-	 * scanned and stored in a structured way.
+	 * <li>All characters which occur after the end of the first format specifier
+	 * will be stored in the "suffix" component.
+	 * <li>All charactcers which comprise the first format specifiert are scanned
+	 * and stored in a structured way.
 	 * </ol>
-	 * All three parts are returned in the fp argument which is described in
-	 * more detail below.
+	 * All three parts are returned in the fp argument which is described in more
+	 * detail below.
 	 */
 	private static void parseFormatString(String format, FormatParas fp) {
 		int specpos = 0;
@@ -844,10 +840,9 @@ public class StringUtil {
 	}
 
 	/**
-	 * Treats the String as character-encoded positive integer value and
-	 * increments it by 1. The return value is larger than s if and only if s
-	 * completely consisted of "9" digits. This case could be considered an
-	 * overflow.
+	 * Treats the String as character-encoded positive integer value and increments
+	 * it by 1. The return value is larger than s if and only if s completely
+	 * consisted of "9" digits. This case could be considered an overflow.
 	 */
 	private static String incrementString(String s) {
 		int i;
@@ -1310,7 +1305,8 @@ public class StringUtil {
 		int daPos = mail.indexOf(".@");
 		String lastChar = mail.substring(len - 1, len);
 		String chkStr = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_@.";
-		if ((aPos <= 0) || (aPos == len - 1) || (dPos <= 0) || (dPos == len - 1) || (adPos > 0) || (daPos > 0) || (lastChar.equals("@")) || (lastChar.equals(".")) || (aaPos > 0) || (ddPos > 0)) {
+		if ((aPos <= 0) || (aPos == len - 1) || (dPos <= 0) || (dPos == len - 1) || (adPos > 0) || (daPos > 0)
+				|| (lastChar.equals("@")) || (lastChar.equals(".")) || (aaPos > 0) || (ddPos > 0)) {
 			return false;
 		}
 		if (mail.indexOf("@", aPos + 1) > 0) {
@@ -1344,8 +1340,8 @@ public class StringUtil {
 	}
 
 	/**
-	 * divide the source String into several String array, the numbers of the
-	 * array is the separator numbers+1
+	 * divide the source String into several String array, the numbers of the array
+	 * is the separator numbers+1
 	 */
 	public static String[] divideStr(String src, String separator) {
 		if (src == null) {
@@ -1731,12 +1727,12 @@ public class StringUtil {
 	}
 
 	/*
-	 * public static String trimKanJiSpace(String s) { if ( s == null) return
-	 * null; s = s.trim(); int nLen = s.length(); int nBegin = 0; int nEnd =
-	 * nLen; for ( int i = 0; i < nLen; i++){ nBegin = i; if (s.charAt(i) !=
-	 * cKanJiSpace){ break; } } for ( int i = nLen-1; i > 0; i--){ if
-	 * (s.charAt(i) != cKanJiSpace){ nEnd = i + 1; break; } } if ( nBegin ==
-	 * nEnd) return ""; s = s.substring(nBegin, nEnd); return s.trim(); }
+	 * public static String trimKanJiSpace(String s) { if ( s == null) return null;
+	 * s = s.trim(); int nLen = s.length(); int nBegin = 0; int nEnd = nLen; for (
+	 * int i = 0; i < nLen; i++){ nBegin = i; if (s.charAt(i) != cKanJiSpace){
+	 * break; } } for ( int i = nLen-1; i > 0; i--){ if (s.charAt(i) !=
+	 * cKanJiSpace){ nEnd = i + 1; break; } } if ( nBegin == nEnd) return ""; s =
+	 * s.substring(nBegin, nEnd); return s.trim(); }
 	 */
 	/**
 	 * Convert a string like "243,434,343" to long like 243434343
@@ -1921,17 +1917,20 @@ public class StringUtil {
 		}
 		return null;
 	}
-	
+
 	private final static String[] prefixs = { "M", "A", "S", "T", "E", "R" };
-	private final static String[] preNum = { "1", "2", "3", "4", "5", "6" ,"7" ,"8" ,"9" ,"0"};
+	private final static String[] preNum = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" };
+
 	/**
 	 * 获取32位UUID
+	 * 
 	 * @return
 	 */
 	public static String getUUID() {
 		String d = "";
-		for(int i=0;i<13;i++)d+=preNum[(int)(Math.random() * 10)];
-		return prefixs[(int)(Math.random() * 5)]+DateUtil.getSysDateByYYYYMMddHHmmssSSS()+00+d;
+		for (int i = 0; i < 13; i++)
+			d += preNum[(int) (Math.random() * 10)];
+		return prefixs[(int) (Math.random() * 5)] + DateUtil.getSysDateByYYYYMMddHHmmssSSS() + 00 + d;
 	}
 
 }
@@ -2075,9 +2074,10 @@ class FormatParas {
 
 		return returnStr;
 	}
-	
+
 	/**
 	 * 判断是否为数字
+	 * 
 	 * @param str
 	 * @return
 	 */
@@ -2085,5 +2085,29 @@ class FormatParas {
 		Pattern pattern = Pattern.compile("[0-9]*");
 		return pattern.matcher(str).matches();
 	}
-	
+
+	/**
+	 * 检查内容是否为IP地址
+	 * 
+	 * @param addr
+	 * @return
+	 */
+	public static boolean isIP(String addr) {
+		if (addr.length() < 7 || addr.length() > 15 || "".equals(addr)) {
+			return false;
+		}
+		/**
+		 * 判断IP格式和范围
+		 */
+		String rexp = "([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}";
+
+		Pattern pat = Pattern.compile(rexp);
+
+		Matcher mat = pat.matcher(addr);
+
+		boolean ipAddress = mat.find();
+
+		return ipAddress;
+	}
+
 }

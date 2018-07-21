@@ -136,7 +136,11 @@ public class Check {
 		return true;
 
 	}
-
+	/**
+	 * 检查内容是否为IP地址
+	 * @param addr
+	 * @return
+	 */
 	public static boolean isIP(String addr) {
 		if (addr.length() < 7 || addr.length() > 15 || "".equals(addr)) {
 			return false;
