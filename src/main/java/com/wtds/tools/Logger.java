@@ -13,7 +13,7 @@ import com.alibaba.fastjson.JSON;
  * 打印日志<br>
  * 
  * @author wyj
- * @version 0.1 
+ * @version 0.1
  * @version 1.0 打印String日志
  * @version 2.0 (2017-07-21) 支持打印json格式日志
  */
@@ -28,11 +28,37 @@ public class Logger {
 	 */
 	private PrintFormat printFormat = PrintFormat.normal;
 
+	/**
+	 * 后缀
+	 */
+	private String suffix = "log";
+
+	/**
+	 * 日志文件名
+	 */
+	String logName;
+
+	/**
+	 * 是否打印控制台
+	 */
 	private boolean consolePrint = true;
+
+	/**
+	 * 日志目录
+	 */
+	String consoleLogPath = System.getProperty("user.dir") + "/log";
+
+	FileWriter fw = null;
+
+	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
+
+	// 实例一个线程池，用于处理日志
+	private ThreadPoolExecutor pool;
 
 	public Logger() {
 		this.logName = "logger";
-		checkPath();
+		init();
 	}
 
 	/**
@@ -41,8 +67,7 @@ public class Logger {
 	 */
 	public Logger(String logName) {
 		this.logName = logName;
-		checkPath();
-		pool = ThreadPoolUtil.newThreadPoolExecutor(0, 1, 60);
+		init();
 	}
 
 	/**
@@ -55,8 +80,8 @@ public class Logger {
 	public Logger(String logName, PrintFormat printFormat) {
 		this.printFormat = printFormat;
 		this.logName = logName;
-		checkPath();
-		pool = ThreadPoolUtil.newThreadPoolExecutor(0, 1, 60);
+		init();
+
 	}
 
 	/**
@@ -67,7 +92,20 @@ public class Logger {
 	public Logger(PrintFormat printFormat) {
 		this.printFormat = printFormat;
 		this.logName = "logger";
+		init();
+	}
+
+	private void init() {
+		switch (this.printFormat) {
+		case normal:
+			suffix = "log";
+			break;
+		case json:
+			suffix = "json.log";
+			break;
+		}
 		checkPath();
+		pool = ThreadPoolUtil.newThreadPoolExecutor(0, 1, 60);
 	}
 
 	/**
@@ -75,7 +113,7 @@ public class Logger {
 	 */
 	public void checkPath() {
 		String filePath = consoleLogPath;
-		String fileName = filePath + "/" + logName + ".log";
+		String fileName = filePath + "/" + logName + "." + suffix;
 		File f = new File(fileName);
 		File path = new File(f.getParent());
 		// 如果文件夹不存在则创建
@@ -83,17 +121,6 @@ public class Logger {
 			path.mkdirs();
 		}
 	}
-
-	String consoleLogPath = System.getProperty("user.dir") + "/log";
-	String logName;
-
-	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
-
-	// 实例一个线程池，用于处理日志
-	private ThreadPoolExecutor pool;
-
-	FileWriter fw = null;
 
 	/**
 	 * 打印日志
@@ -106,14 +133,14 @@ public class Logger {
 		Date currentTime = new Date();
 		String dayStr = formatter2.format(currentTime);
 		String dateString = formatter.format(currentTime);
-		String fileName = filePath + "/" + logName + ".log";
+		String fileName = filePath + "/" + logName + "." + suffix;
 
 		try {
 			File f = new File(fileName);
 
 			String lts = formatter2.format(f.lastModified());
 			if (!dayStr.equals(lts)) {
-				String rfileName = filePath + "/" + logName + "_" + lts + ".log";
+				String rfileName = filePath + "/" + logName + "_" + lts + "." + suffix;
 				f.renameTo(new File(rfileName));
 				f = new File(fileName);
 			}
@@ -125,8 +152,10 @@ public class Logger {
 		}
 
 		synchronized (fw) {
+
 			try {
 				PrintWriter pw = new PrintWriter(fw);
+
 				switch (printFormat) {
 				case normal:
 					if (addflag) {
@@ -136,8 +165,7 @@ public class Logger {
 					}
 					break;
 				case json:
-					String content = JSON.toJSONString(new Info(dateString, info));
-					pw.println(content);
+					pw.println(JSON.toJSONString(new Info(dateString, info)));
 					break;
 				}
 
@@ -162,11 +190,19 @@ public class Logger {
 	public void info(Object info, boolean addflag) {
 		final Object msg = info;
 		final boolean flag = addflag;
+		// 控制台打印
+		if (consolePrint) {
+			if ((info + "").length() > 256) {
+				System.out.println((info + "").substring(0, 256) + "...");
+			} else {
+				System.out.println((info + ""));
+			}
+		}
+
 		pool.execute(new Runnable() {
 			public void run() {
 				try {
 					sendLogger(msg, flag);
-					// new Logger(logName).sendLogger(msg, flag);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -179,14 +215,7 @@ public class Logger {
 	 * 
 	 * @param info
 	 */
-	public void info(String info) {
-		if (consolePrint) {
-			if (info.length() > 256) {
-				System.out.println(info.substring(0, 256) + "...");
-			} else {
-				System.out.println(info);
-			}
-		}
+	public void info(Object info) {
 		info(info, false);
 	}
 
@@ -199,7 +228,6 @@ public class Logger {
 	}
 
 	class Info {
-
 		public Info(String time, Object content) {
 			this.time = time;
 			this.content = content;
@@ -225,5 +253,4 @@ public class Logger {
 		}
 
 	}
-
 }
