@@ -144,7 +144,7 @@ public class StringUtil {
 	// ---Public general String handling methods--------------------------
 
 	/**
-	 * æ›¿æ¢ç‰¹æ®Šå­—ç¬¦ä¸ºUnicodeç¼–ç ,é˜²æ­¢æ³¨å…¥
+	 * Ìæ»»ÌØÊâ×Ö·ûÎªUnicode±àÂë,·ÀÖ¹×¢Èë
 	 * 
 	 * @param str
 	 * @return
@@ -897,11 +897,11 @@ public class StringUtil {
 		// sArgs[3] = " is not good";
 		// String sStr = Str.format(format, sArgs);
 		// cat.debug("STR IS:" + sStr);
-		System.out.print(StringUtil.toInputStreamString("è®¢å•æ€»é‡‘é¢", "UTF-8"));
+		System.out.print(StringUtil.toInputStreamString("¶©µ¥×Ü½ğ¶î", "UTF-8"));
 	}
 
 	@SuppressWarnings("unused")
-	private static final char cKanJiSpace = 'ä¸‚';
+	private static final char cKanJiSpace = '@';
 
 	/**
 	 * replace sub string
@@ -929,9 +929,9 @@ public class StringUtil {
 	}
 
 	// ---------------------------------------------------------------
-	// å©¡æ“» æ•¿å¦å©°å´‹ä»ºæ…¡å¦å©°å´‹æ›„å§º
-	// å ·æ‚¢ str æ›„å§ºåå‚Ÿå‚æš¥å¸¤æ¥
-	// æ  å‚æŠ£ æ›„å§ºå±»åºæš¥å¸¤æ¥
+	// ‹@”\ ”¼Šp‹L†¨‘SŠp‹L†•ÏŠ·
+	// ˆø” str •ÏŠ·‚³‚ê‚é•¶š—ñ
+	// –ß‚è’l •ÏŠ·Œã‚Ì•¶š—ñ
 	// ---------------------------------------------------------------
 	public static String chgHkigo2Zkigo(String str) {
 
@@ -940,7 +940,7 @@ public class StringUtil {
 		String Z_kigo;
 		String H_kigo;
 
-		Z_kigo = "ä¸¡äº¹äº…ä»ˆä»ä¸ä¸µä¹«ä¸†ä¹­";
+		Z_kigo = "I|”—DQfCh";
 		H_kigo = "!$-#@._/,\"";
 
 		tmp = str;
@@ -953,9 +953,9 @@ public class StringUtil {
 	}
 
 	// ---------------------------------------------------------------
-	// å©¡æ“» æ•¿å¦åƒ‡åƒ«ä»ºæ…¡å¦åƒ‡åƒ«æ›„å§º
-	// å ·æ‚¢ str æ›„å§ºåå‚Ÿå‚æš¥å¸¤æ¥
-	// æ  å‚æŠ£ æ›„å§ºå±»åºæš¥å¸¤æ¥
+	// ‹@”\ ”¼ŠpƒJƒi¨‘SŠpƒJƒi•ÏŠ·
+	// ˆø” str •ÏŠ·‚³‚ê‚é•¶š—ñ
+	// –ß‚è’l •ÏŠ·Œã‚Ì•¶š—ñ
 	// ---------------------------------------------------------------
 	public static String chgHkana2Zkana(String str) {
 
@@ -964,19 +964,19 @@ public class StringUtil {
 		String Z_kana;
 		String H_kana;
 
-		Z_kana = "å‚¾åƒ€åƒ‚åƒ„åƒ†åƒ‡åƒ‰åƒ‹åƒåƒåƒ’åƒ”åƒ—åƒ™åƒœåƒåƒ åƒ£åƒ¥åƒ©åƒ«åƒ¯åƒ°åƒ±åƒ²åƒ´åƒ¸åƒ¼åƒ¿å„‚å„…å„ˆå„‰å„Šå„Œå„å„å„“å„”å„•å„–å„—å„˜å„šå„å„";
-		H_kana = "è¾ˆç‚’åˆ€çŠ¯è´­æ‚£éª„å·è°…åªšç‰Œä¾¨å¢’é¢‚è‡€é—²å²©é‡‰ç½©æ£•ä»åœ®îœ±";
+		Z_kana = "ƒAƒCƒEƒGƒIƒJƒLƒNƒPƒRƒTƒVƒXƒZƒ\ƒ^ƒ`ƒcƒeƒgƒiƒjƒkƒlƒmƒnƒqƒtƒwƒzƒ}ƒ~ƒ€ƒƒ‚ƒ„ƒ†ƒˆƒ‰ƒŠƒ‹ƒŒƒƒƒ’ƒ“";
+		H_kana = "±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜ§k";
 
-		String Z_kana2 = "æ‡å¿¿çš‹ç½æ¨æ™¦å«ç«å·¨å“­æ“‚èµç½—æ£‰éœ“å…½å®¿å‰”å¨ƒæ— è”¬è¯‰è¸¢ç“¦èŠœ";
-		String H_kana2 = "åƒˆåƒŠåƒŒåƒåƒ‘åƒ“åƒ•åƒ˜åƒ›åƒåƒŸåƒ¡åƒ¤åƒ¨åƒªåƒ¶åƒ¹åƒ½å„€å„ƒåƒ·åƒºåƒ¾å„å„„";
+		String Z_kana2 = "¶Ş·Ş¸Ş¹ŞºŞ»Ş¼Ş½Ş¾Ş¿ŞÀŞÁŞÂŞÃŞÄŞÊŞËŞÌŞÍŞÎŞÊßËßÌßÍßÎß";
+		String H_kana2 = "ƒKƒMƒOƒQƒSƒUƒWƒYƒ[ƒ]ƒ_ƒaƒdƒfƒhƒoƒrƒuƒxƒ{ƒpƒsƒvƒyƒ|";
 
 		tmp = str;
-		// æˆºå£’ä¸’æ•¿æˆºå£’å‚ªæ›„å§º;
+		// ‘÷‰¹E”¼‘÷‰¹‚ğ•ÏŠ·;
 		for (i = 0; i < H_kana2.length(); i++) {
 			tmp = tmp.replace(H_kana2.charAt(i), Z_kana2.charAt(i));
 		}
 
-		// æ å¿¢åºåƒ‡åƒ«å‚ªæ›„å§º;
+		// ’Êí‚ÌƒJƒi‚ğ•ÏŠ·;
 		for (i = 0; i < H_kana.length(); i++) {
 			tmp = tmp.replace(H_kana.charAt(i), Z_kana.charAt(i));
 		}
@@ -986,9 +986,9 @@ public class StringUtil {
 	}
 
 	// ---------------------------------------------------------------
-	// å©¡æ“» vbcrlf,vbcr,vblf,vbtabä»ºæ•¿å¦åƒ—å„ä¹•åƒ—æ›„å§º
-	// å ·æ‚¢ str æ›„å§ºåå‚Ÿå‚æš¥å¸¤æ¥
-	// æ  å‚æŠ£ æ›„å§ºå±»åºæš¥å¸¤æ¥
+	// ‹@”\ vbcrlf,vbcr,vblf,vbtab¨”¼ŠpƒXƒy[ƒX•ÏŠ·
+	// ˆø” str •ÏŠ·‚³‚ê‚é•¶š—ñ
+	// –ß‚è’l •ÏŠ·Œã‚Ì•¶š—ñ
 	// ---------------------------------------------------------------
 	public static String chgCRLFTAB2SPC(String str) {
 
@@ -1005,21 +1005,21 @@ public class StringUtil {
 	}
 
 	// -----------------------------------------------------------------------------
-	// å©¡æ“» æš¥å¸¤æ¥åµæ•¿å¦ä¸’æ…¡å¦åºåå´ä¸’åƒ‡åƒ«å‘å¨·å‚‘å‚Ÿå°å„å‚ååƒ åƒƒåƒ¢åƒ‹
-	// å ·æ‚¢ strValue æ“–æ¤¡æš¥å¸¤æ¥
-	// æ  æŠ£ falseä¸—å¨·å‚‘å‚Ÿå°å„å´å„
-	// ä¸‚ä¸‚ä¸‚trueä¸—å¨·å‚‘å‚Ÿå°å„å‚
+	// ‹@”\ •¶š—ñ‚É”¼ŠpE‘SŠp‚Ì‚©‚ÈEƒJƒi‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
+	// ˆø” strValue “ü—Í•¶š—ñ
+	// –ß’l falseFŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢
+	// @@@trueFŠÜ‚Ü‚ê‚Ä‚¢‚é
 	// -----------------------------------------------------------------------------
 	public static boolean hasKana(String str) {
 
 		String kana;
 		int i;
 
-		kana = "å‚¾åƒ€åƒ‚åƒ„åƒ†åƒ‡åƒ‰åƒ‹åƒåƒåƒ’åƒ”åƒ—åƒ™åƒœåƒåƒ åƒ£åƒ¥åƒ©åƒ«åƒ¯åƒ°åƒ±åƒ²åƒ´åƒ¸åƒ¼åƒ¿å„‚å„…å„ˆå„‰å„Šå„Œå„å„å„“å„”å„•å„–å„—å„˜å„šå„å„";
-		kana += "åƒˆåƒŠåƒŒåƒåƒ‘åƒ“åƒ•åƒ˜åƒ›åƒåƒŸåƒ¡åƒ¤åƒ¨åƒªåƒ¶åƒ¹åƒ½å„€å„ƒåƒ·åƒºåƒ¾å„å„„å‚½å‚¿åƒåƒƒåƒ…å„ å„¢åƒ¢å„å„å„‘å„™";
-		kana += "åå„å†åŠååå’å”å—å™ååŸå¡å£å¦å¨åªå®å°å²å´åµå¸å¹åºå¼å‚‚å‚†å‚Šå‚å‚‘å‚’å‚“å‚”å‚•å‚—å‚™å‚›å‚œå‚å‚å‚Ÿå‚ å‚¢å‚ªå‚«";
-		kana += "å‘å“å–å˜å›åå å¢å¤å§å©å«å¯å±å³å½å‚ƒå‚‡å‚‹å‚å‚å‚„å‚‰å‚Œå‚å€å‚å…å‰å‹å­å‚–å‚˜å‚šå‚¡ä¹•";
-		kana += "è¾ˆç‚’åˆ€çŠ¯è´­æ‚£éª„å·è°…åªšç‰Œä¾¨å¢’é¢‚è‡€é—²å²©é‡‰ç½©æ£•ä»åœ®îœ±Ğ–â”†î¬îƒˆî†µç”™";
+		kana = "ƒAƒCƒEƒGƒIƒJƒLƒNƒPƒRƒTƒVƒXƒZƒ\ƒ^ƒ`ƒcƒeƒgƒiƒjƒkƒlƒmƒnƒqƒtƒwƒzƒ}ƒ~ƒ€ƒƒ‚ƒ„ƒ†ƒˆƒ‰ƒŠƒ‹ƒŒƒƒƒ’ƒ“";
+		kana += "ƒKƒMƒOƒQƒSƒUƒWƒYƒ[ƒ]ƒ_ƒaƒdƒfƒhƒoƒrƒuƒxƒ{ƒpƒsƒvƒyƒ|ƒ@ƒBƒDƒFƒHƒ•ƒ–ƒbƒƒƒ…ƒ‡ƒ";
+		kana += "‚ ‚¢‚¤‚¦‚¨‚©‚«‚­‚¯‚±‚³‚µ‚·‚¹‚»‚½‚¿‚Â‚Ä‚Æ‚È‚É‚Ê‚Ë‚Ì‚Í‚Ğ‚Ó‚Ö‚Ù‚Ü‚İ‚Ş‚ß‚à‚â‚ä‚æ‚ç‚è‚é‚ê‚ë‚í‚ğ‚ñ";
+		kana += "‚ª‚¬‚®‚°‚²‚´‚¶‚¸‚º‚¼‚¾‚À‚Ã‚Å‚Ç‚Î‚Ñ‚Ô‚×‚Ú‚Ï‚Ò‚Õ‚Ø‚Û‚Ÿ‚¡‚£‚¥‚§‚Á‚á‚ã‚å‚ì[";
+		kana += "±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜ§k§¨©ª«¯¬­®Şß°";
 
 		for (i = 0; i < str.length(); i++) {
 			if (kana.indexOf(str.substring(i, i + 1)) >= 0) {
@@ -1030,17 +1030,17 @@ public class StringUtil {
 		return false;
 	}
 
-	// æš¥å¸¤æ¥åµæ…¡æ™¹å±æ•¿å¦ä¸’æ…¡å¦åºåå´ä¸’åƒ‡åƒ«ååƒ åƒƒåƒ¢åƒ‹
+	// •¶š—ñ‚É‘S•”‚Å”¼ŠpE‘SŠp‚Ì‚©‚ÈEƒJƒi‚©ƒ`ƒFƒbƒN
 	public static boolean chkKana(String str) {
 
 		String kana;
 		int i;
 
-		kana = "å‚¾åƒ€åƒ‚åƒ„åƒ†åƒ‡åƒ‰åƒ‹åƒåƒåƒ’åƒ”åƒ—åƒ™åƒœåƒåƒ åƒ£åƒ¥åƒ©åƒ«åƒ¯åƒ°åƒ±åƒ²åƒ´åƒ¸åƒ¼åƒ¿å„‚å„…å„ˆå„‰å„Šå„Œå„å„å„“å„”å„•å„–å„—å„˜å„šå„å„";
-		kana += "åƒˆåƒŠåƒŒåƒåƒ‘åƒ“åƒ•åƒ˜åƒ›åƒåƒŸåƒ¡åƒ¤åƒ¨åƒªåƒ¶åƒ¹åƒ½å„€å„ƒåƒ·åƒºåƒ¾å„å„„å‚½å‚¿åƒåƒƒåƒ…å„ å„¢åƒ¢å„å„å„‘å„™";
-		kana += "åå„å†åŠååå’å”å—å™ååŸå¡å£å¦å¨åªå®å°å²å´åµå¸å¹åºå¼å‚‚å‚†å‚Šå‚å‚‘å‚’å‚“å‚”å‚•å‚—å‚™å‚›å‚œå‚å‚å‚Ÿå‚ å‚¢å‚ªå‚«";
-		kana += "å‘å“å–å˜å›åå å¢å¤å§å©å«å¯å±å³å½å‚ƒå‚‡å‚‹å‚å‚å‚„å‚‰å‚Œå‚å€å‚å…å‰å‹å­å‚–å‚˜å‚šå‚¡ä¹•";
-		kana += "è¾ˆç‚’åˆ€çŠ¯è´­æ‚£éª„å·è°…åªšç‰Œä¾¨å¢’é¢‚è‡€é—²å²©é‡‰ç½©æ£•ä»åœ®îœ±Ğ–â”†î¬îƒˆî†µç”™ ä¸‚";
+		kana = "ƒAƒCƒEƒGƒIƒJƒLƒNƒPƒRƒTƒVƒXƒZƒ\ƒ^ƒ`ƒcƒeƒgƒiƒjƒkƒlƒmƒnƒqƒtƒwƒzƒ}ƒ~ƒ€ƒƒ‚ƒ„ƒ†ƒˆƒ‰ƒŠƒ‹ƒŒƒƒƒ’ƒ“";
+		kana += "ƒKƒMƒOƒQƒSƒUƒWƒYƒ[ƒ]ƒ_ƒaƒdƒfƒhƒoƒrƒuƒxƒ{ƒpƒsƒvƒyƒ|ƒ@ƒBƒDƒFƒHƒ•ƒ–ƒbƒƒƒ…ƒ‡ƒ";
+		kana += "‚ ‚¢‚¤‚¦‚¨‚©‚«‚­‚¯‚±‚³‚µ‚·‚¹‚»‚½‚¿‚Â‚Ä‚Æ‚È‚É‚Ê‚Ë‚Ì‚Í‚Ğ‚Ó‚Ö‚Ù‚Ü‚İ‚Ş‚ß‚à‚â‚ä‚æ‚ç‚è‚é‚ê‚ë‚í‚ğ‚ñ";
+		kana += "‚ª‚¬‚®‚°‚²‚´‚¶‚¸‚º‚¼‚¾‚À‚Ã‚Å‚Ç‚Î‚Ñ‚Ô‚×‚Ú‚Ï‚Ò‚Õ‚Ø‚Û‚Ÿ‚¡‚£‚¥‚§‚Á‚á‚ã‚å‚ì[";
+		kana += "±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜ§k§¨©ª«¯¬­®Şß° @";
 
 		for (i = 0; i < str.length(); i++) {
 			if (kana.indexOf(str.substring(i, i + 1)) < 0) {
@@ -1052,10 +1052,10 @@ public class StringUtil {
 	}
 
 	// -----------------------------------------------------------------------------
-	// å©¡æ“» æš¥å¸¤æ¥åµæ…¡å¦æš¥å¸¤å‘å¨·å‚‘å‚Ÿå°å„å‚ååƒ åƒƒåƒ¢åƒ‹
-	// å ·æ‚¢ strValue æ“–æ¤¡æš¥å¸¤æ¥
-	// æ  æŠ£ true ä¸—å¨·å‚‘å‚Ÿå°å„å´å„
-	// ä¸‚ä¸‚ä¸‚falseä¸—å¨·å‚‘å‚Ÿå°å„å‚
+	// ‹@”\ •¶š—ñ‚É‘SŠp•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
+	// ˆø” strValue “ü—Í•¶š—ñ
+	// –ß’l true FŠÜ‚Ü‚ê‚Ä‚¢‚È‚¢
+	// @@@falseFŠÜ‚Ü‚ê‚Ä‚¢‚é
 	// -----------------------------------------------------------------------------
 	public static boolean hasZenkaku(String str) {
 
@@ -1156,7 +1156,7 @@ public class StringUtil {
 	}
 
 	/*
-	 * æš¥å¸¤æ¥åµæ‚¢å¸¤å‚ªåƒ åƒƒåƒ¢åƒ‹
+	 * •¶š—ñ‚É”š‚ğƒ`ƒFƒbƒN
 	 */
 	public static boolean isNumber(String str) {
 		int i;
@@ -1169,13 +1169,13 @@ public class StringUtil {
 	}
 
 	/*
-	 * æš¥å¸¤æ¥åµæ…¡å¦æ‚¢å¸¤å¡¸æš¥å‘å¨·å‚‘å‚Ÿå°å„å‚ååƒ åƒƒåƒ¢åƒ‹
+	 * •¶š—ñ‚É‘SŠp”š‰p•¶‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
 	 */
 	public static boolean containsZenNum(String str) {
 		int i;
-		String zenNum = "ä¾½ä¾¾ä¿€ä¿ä¿‚ä¿†ä¿‡ä¿ˆä¿‰ä¿‹";
-		zenNum += "å€å€å€‘å€“å€•å€–å€—å€›å€å€å€ å€¢å€£å€¤å€§å€«å€¯å€°å€±å€²å€³å€´å€µå€¶å€·å€¸";
-		zenNum += "ä¿™ä¿›ä¿ ä¿¢ä¿¤ä¿¥ä¿§ä¿«ä¿¬ä¿°ä¿²ä¿´ä¿µä¿¶ä¿·ä¿¹ä¿»ä¿¼ä¿½ä¿¿å€€å€å€‚å€ƒå€„å€…";
+		String zenNum = "‚O‚P‚Q‚R‚S‚T‚U‚V‚W‚X";
+		zenNum += "‚‚‚‚ƒ‚„‚…‚†‚‡‚ˆ‚‰‚Š‚‹‚Œ‚‚‚‚‚‘‚’‚“‚”‚•‚–‚—‚˜‚™‚š";
+		zenNum += "‚`‚a‚b‚c‚d‚e‚f‚g‚h‚i‚j‚k‚l‚m‚n‚o‚p‚q‚r‚s‚t‚u‚v‚w‚x‚y";
 		for (i = 0; i < str.length(); i++) {
 			if (zenNum.indexOf(str.substring(i, i + 1)) >= 0) {
 				return true;
@@ -1561,7 +1561,7 @@ public class StringUtil {
 
 		String sOut = sIn;
 
-		sOut = replaceStr(sOut, "\"", "ä¹­");
+		sOut = replaceStr(sOut, "\"", "h");
 
 		if (nMaxLen != -1) {
 			byte[] bs = sOut.getBytes();
@@ -1587,7 +1587,7 @@ public class StringUtil {
 		return sOut;
 	}
 
-	// å‘htmlé¡µé¢å‘é€å›ºå®šé•¿åº¦çš„å­—ç¬¦ä¸²é€‚åˆå®½åº¦å›ºå®šçš„<TD> lengthä¸ºä¸­æ–‡å­—çš„é•¿åº¦ï¼Œæ—é‡‘é’Ÿæ·»åŠ 
+	// ÏòhtmlÒ³Ãæ·¢ËÍ¹Ì¶¨³¤¶ÈµÄ×Ö·û´®ÊÊºÏ¿í¶È¹Ì¶¨µÄ<TD> lengthÎªÖĞÎÄ×ÖµÄ³¤¶È£¬ÁÖ½ğÖÓÌí¼Ó
 	public static String getHtmlBRString(int length, String sIn) {
 		if (sIn == null) {
 			return "";
@@ -1612,7 +1612,7 @@ public class StringUtil {
 	}
 
 	public static boolean isSpace(char c) {
-		return (c == ' ' || c == '\t' || c == 'ä¸‚');
+		return (c == ' ' || c == '\t' || c == '@');
 	}
 
 	public static boolean isSpace(String s) {
@@ -1693,7 +1693,7 @@ public class StringUtil {
 	}
 
 	/**
-	 * å°†æ•°æ®åº“ä¸­å–å‡ºçš„æ—¥æœŸå­—ç¬¦ä¸²æ ¼å¼åŒ– 1ã€åªè¦æ—¥æœŸï¼Œä¸è¦æ—¶é—´ 2ã€å¦‚æœæ—¶1900å¹´ï¼Œè¯´æ˜æ—¥æœŸä¸ºç©º
+	 * ½«Êı¾İ¿âÖĞÈ¡³öµÄÈÕÆÚ×Ö·û´®¸ñÊ½»¯ 1¡¢Ö»ÒªÈÕÆÚ£¬²»ÒªÊ±¼ä 2¡¢Èç¹ûÊ±1900Äê£¬ËµÃ÷ÈÕÆÚÎª¿Õ
 	 * 
 	 * @param date
 	 * @return
@@ -1840,11 +1840,11 @@ public class StringUtil {
 	}
 
 	/**
-	 * å°†å­—ç¬¦ä¸²è½¬æ¢æˆæ•´æ•°ï¼Œå¦‚æœæ˜¯æ— æ•ˆå­—ç¬¦ï¼Œåˆ™è¿”å›0ã€æˆ–è€…nullã€‚
+	 * ½«×Ö·û´®×ª»»³ÉÕûÊı£¬Èç¹ûÊÇÎŞĞ§×Ö·û£¬Ôò·µ»Ø0¡¢»òÕßnull¡£
 	 * 
 	 * @param num
-	 *            å¾…è½¬æ¢å­—ç¬¦
-	 * @return è½¬æ¢åçš„æ•´æ•°
+	 *            ´ı×ª»»×Ö·û
+	 * @return ×ª»»ºóµÄÕûÊı
 	 */
 	public static int getInt(String num) {
 		int id = 0;
@@ -1862,14 +1862,14 @@ public class StringUtil {
 	}
 
 	/**
-	 * å°†Doubleå‹æ•°å­—è½¬æ¢æˆæ•´æ•°
+	 * ½«DoubleĞÍÊı×Ö×ª»»³ÉÕûÊı
 	 */
 	public static int doubleToInt(double num) {
 		return (int) num;
 	}
 
 	/**
-	 * å°†Doubleå‹å››èˆäº”å…¥ï¼Œåªä¿ç•™å°æ•°ç‚¹ä¸¤ä½
+	 * ½«DoubleĞÍËÄÉáÎåÈë£¬Ö»±£ÁôĞ¡ÊıµãÁ½Î»
 	 */
 	public static double doubleToDouble(double num) {
 		NumberFormat form = NumberFormat.getInstance();
@@ -1922,7 +1922,7 @@ public class StringUtil {
 	private final static String[] preNum = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" };
 
 	/**
-	 * è·å–32ä½UUID
+	 * »ñÈ¡32Î»UUID
 	 * 
 	 * @return
 	 */
@@ -1931,6 +1931,41 @@ public class StringUtil {
 		for (int i = 0; i < 13; i++)
 			d += preNum[(int) (Math.random() * 10)];
 		return prefixs[(int) (Math.random() * 5)] + DateUtil.getSysDateByYYYYMMddHHmmssSSS() + 00 + d;
+	}
+	
+	/**
+	 * ÅĞ¶ÏÊÇ·ñÎªÊı×Ö
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static boolean isNumeric(String str) {
+		Pattern pattern = Pattern.compile("([0-9]*)|([0-9]+\\.[0-9]*)");
+		return pattern.matcher(str).matches();
+	}
+	
+	/**
+	 * ¼ì²éÄÚÈİÊÇ·ñÎªIPµØÖ·
+	 * 
+	 * @param addr
+	 * @return
+	 */
+	public static boolean isIP(String addr) {
+		if (addr.length() < 7 || addr.length() > 15 || "".equals(addr)) {
+			return false;
+		}
+		/**
+		 * ÅĞ¶ÏIP¸ñÊ½ºÍ·¶Î§
+		 */
+		String rexp = "([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}";
+
+		Pattern pat = Pattern.compile(rexp);
+
+		Matcher mat = pat.matcher(addr);
+
+		boolean ipAddress = mat.find();
+
+		return ipAddress;
 	}
 
 }
@@ -2012,12 +2047,12 @@ class FormatParas {
 	}
 
 	/**
-	 * æŒ‰ç…§æŒ‡å®šé•¿åº¦æˆªå–ä¸­è‹±æ–‡å­—ç¬¦ä¸²
+	 * °´ÕÕÖ¸¶¨³¤¶È½ØÈ¡ÖĞÓ¢ÎÄ×Ö·û´®
 	 * 
 	 * @param str
-	 *            éœ€è¦æˆªå–çš„å­—ç¬¦ä¸²
+	 *            ĞèÒª½ØÈ¡µÄ×Ö·û´®
 	 * @param size
-	 *            æŒ‡å®šé•¿åº¦ï¼Œä¸ºå­—èŠ‚çš„é•¿åº¦ï¼ŒæŒ‰ç…§ä¸­æ–‡2ä¸ªè‹±æ–‡æ•°å­—1ä¸ªè®¡ç®—
+	 *            Ö¸¶¨³¤¶È£¬Îª×Ö½ÚµÄ³¤¶È£¬°´ÕÕÖĞÎÄ2¸öÓ¢ÎÄÊı×Ö1¸ö¼ÆËã
 	 * @return
 	 */
 	public static String substring(String str) {
@@ -2044,12 +2079,12 @@ class FormatParas {
 	}
 
 	/**
-	 * æŒ‰ç…§æŒ‡å®šé•¿åº¦æˆªå–ä¸­è‹±æ–‡å­—ç¬¦ä¸²
+	 * °´ÕÕÖ¸¶¨³¤¶È½ØÈ¡ÖĞÓ¢ÎÄ×Ö·û´®
 	 * 
 	 * @param str
-	 *            éœ€è¦æˆªå–çš„å­—ç¬¦ä¸²
+	 *            ĞèÒª½ØÈ¡µÄ×Ö·û´®
 	 * @param size
-	 *            æŒ‡å®šé•¿åº¦ï¼Œä¸ºå­—èŠ‚çš„é•¿åº¦ï¼ŒæŒ‰ç…§ä¸­æ–‡2ä¸ªè‹±æ–‡æ•°å­—1ä¸ªè®¡ç®—
+	 *            Ö¸¶¨³¤¶È£¬Îª×Ö½ÚµÄ³¤¶È£¬°´ÕÕÖĞÎÄ2¸öÓ¢ÎÄÊı×Ö1¸ö¼ÆËã
 	 * @return
 	 */
 	public static String substring(String str, int size) {
@@ -2074,40 +2109,4 @@ class FormatParas {
 
 		return returnStr;
 	}
-
-	/**
-	 * åˆ¤æ–­æ˜¯å¦ä¸ºæ•°å­—
-	 * 
-	 * @param str
-	 * @return
-	 */
-	public static boolean isNumeric(String str) {
-		Pattern pattern = Pattern.compile("[0-9]*");
-		return pattern.matcher(str).matches();
-	}
-
-	/**
-	 * æ£€æŸ¥å†…å®¹æ˜¯å¦ä¸ºIPåœ°å€
-	 * 
-	 * @param addr
-	 * @return
-	 */
-	public static boolean isIP(String addr) {
-		if (addr.length() < 7 || addr.length() > 15 || "".equals(addr)) {
-			return false;
-		}
-		/**
-		 * åˆ¤æ–­IPæ ¼å¼å’ŒèŒƒå›´
-		 */
-		String rexp = "([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}";
-
-		Pattern pat = Pattern.compile(rexp);
-
-		Matcher mat = pat.matcher(addr);
-
-		boolean ipAddress = mat.find();
-
-		return ipAddress;
-	}
-
 }
