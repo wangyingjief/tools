@@ -352,6 +352,7 @@ public class LogInfo {
 		final String msg = info; 
 		final boolean flag = addflag;
 		fixedThreadPool.execute(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					new LogInfo().sendLogger(msg,flag);

@@ -25,7 +25,7 @@ public class ChineseAddress {
     public List<String> notes;  
     public List<String> noises;  
     private static final String SEPARATOR = System.getProperty("line.separator");  
-  
+    @Override
     public String toString() {  
         String s = "src: " + source + SEPARATOR;  
         if (nation != null) {  

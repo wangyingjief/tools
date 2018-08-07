@@ -1940,7 +1940,8 @@ public class StringUtil {
 	 * @return
 	 */
 	public static boolean isNumeric(String str) {
-		Pattern pattern = Pattern.compile("([0-9]*)|([0-9]+\\.[0-9]*)");
+		final String compileStr = "([0-9]*)|([0-9]+\\.[0-9]*)";
+		Pattern pattern = Pattern.compile(compileStr);
 		return pattern.matcher(str).matches();
 	}
 	
@@ -2019,6 +2020,7 @@ class FormatParas {
 	/**
 	 * Returns a String representation of the object's state.
 	 */
+	@Override
 	public String toString() {
 		String ret = "";
 		ret += "specfound........: " + specfound + "\n";

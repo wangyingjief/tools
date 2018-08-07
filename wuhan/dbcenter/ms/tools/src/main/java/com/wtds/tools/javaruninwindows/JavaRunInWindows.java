@@ -383,6 +383,7 @@ public class JavaRunInWindows {
 		t = Executors.newFixedThreadPool(1);
 		t.execute(new RunJava());
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
 				delayLoadPid();
 			}
@@ -480,6 +481,7 @@ public class JavaRunInWindows {
 	 * @author wyj
 	 */
 	class RunJava implements Runnable{
+		@Override
 		public void run() {
 			try {
 				shell(conf.getExecFileName());
@@ -569,6 +571,7 @@ public class JavaRunInWindows {
 			final String msg = info;
 			final boolean flag = addflag;
 			fixedThreadPool.execute(new Runnable() {
+				@Override
 				public void run() {
 					try {
 						new Logger().sendLogger(msg, flag);

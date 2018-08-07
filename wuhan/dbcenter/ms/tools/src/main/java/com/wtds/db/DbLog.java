@@ -92,6 +92,7 @@ public class DbLog {
 		final String msg = info;
 		final boolean flag = addflag;
 		fixedThreadPool.execute(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					new DbLog().sendLogger(msg, flag);

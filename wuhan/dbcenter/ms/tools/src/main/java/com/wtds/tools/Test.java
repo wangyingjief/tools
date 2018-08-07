@@ -12,7 +12,7 @@ public class Test {
 		
 		Udp udp = new Udp(22002);
 		udp.receiveMessage(new UdpCallback() {
-			
+			@Override
 			public void getDatagramPacket(String msg,DatagramPacket pack) {
 				System.out.println(i+"|"+msg);
 				i++;
@@ -51,11 +51,13 @@ public class Test {
 		// 1、创建DatagramSocket;
 		socket = new DatagramSocket(22002);
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
 
 				while (true) {
 					try {
 						new Test().receiveMessage(22002, new UdpCallback() {
+							@Override
 							public void getDatagramPacket(String msg, DatagramPacket pack) {
 								// TODO Auto-generated method stub
 								
@@ -79,6 +81,7 @@ public class Test {
 		// 3、接收数据
 		socket.receive(packet);
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
 				callback.getDatagramPacket(new String(packet.getData()),packet);
 			}

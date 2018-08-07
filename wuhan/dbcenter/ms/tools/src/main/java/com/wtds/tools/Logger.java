@@ -200,6 +200,7 @@ public class Logger {
 		}
 
 		pool.execute(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					sendLogger(msg, flag);
