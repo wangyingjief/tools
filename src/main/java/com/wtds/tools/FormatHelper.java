@@ -711,7 +711,7 @@ public class FormatHelper {
 		if (StringUtil.isEmpty(str)) {
 			return "";
 		}
-
+		
 		Pattern pattern = Pattern
 				.compile("<[^<|>]*>", Pattern.CASE_INSENSITIVE);
 		Pattern pattern1 = Pattern.compile("&nbsp;", Pattern.CASE_INSENSITIVE);

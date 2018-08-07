@@ -81,7 +81,7 @@ public class CmdProcessor {
      */  
     private void warnTimeout() {  
         new Thread(new Runnable() {  
-  
+        	@Override
             public void run() {  
                 while (!mStop) {  
                     long passedSec = (System.currentTimeMillis() - mCmdStartMillis);  
@@ -130,7 +130,7 @@ public class CmdProcessor {
         final Object tmpLock = new Object();  
   
         new Thread(new Runnable() {  
-  
+        	@Override
             public void run() {  
                 long start = System.currentTimeMillis();  
                 while (true) {  
@@ -167,7 +167,7 @@ public class CmdProcessor {
         init();  
   
         new Thread(new Runnable() {  
-  
+        	@Override
             public void run() {
                 try {  
                     processCmds();  
